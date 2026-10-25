@@ -1,23 +1,23 @@
 /* 自动生成，请勿手动修改。
    源文件：content/site.json + content/works.json（后台 /admin 编辑）
    重新生成：node build.mjs
-   生成时间：2026-10-25T12:03:22.568Z */
+   生成时间：2026-10-25T15:15:32.518Z */
 window.__CONTENT__ = {
   "site": {
     "me": {
-      "name": "王榕兵",
-      "en": "WANG RONGBING",
-      "role": "剪辑师",
-      "units": "剪辑 / 动效包装 / AIGC",
       "headlineTop": "把故事",
-      "headlineBottom": "剪进节奏里",
-      "headlineAccent": "节奏",
-      "tagline": "剪辑师 / 动效包装 / AIGC。\n宣传片、短视频、MG 动效与 AI 生成 —— 把叙事、节奏和画面握在同一双手里。",
-      "status": "可接片",
-      "email": "hello@example.com",
       "wechat": "your_wechat",
       "bilibili": "https://space.bilibili.com/000000000",
-      "feishu": "https://zqq5cr7upp9.feishu.cn/wiki/WZmewobubiSGmukpmjqcx9nPn1b"
+      "en": "WANG RONGBING",
+      "name": "王榕兵",
+      "tagline": "剪辑师 / 动效包装 / AIGC。\n宣传片、短视频、MG 动效与 AI 生成 \n把叙事、节奏和画面握在同一双手里。",
+      "units": "剪辑 / 动效包装 / AIGC",
+      "status": "可接片",
+      "role": "剪辑师",
+      "feishu": "https://zqq5cr7upp9.feishu.cn/wiki/WZmewobubiSGmukpmjqcx9nPn1b",
+      "email": "hello@example.com",
+      "headlineAccent": "节奏",
+      "headlineBottom": "剪进节奏里"
     },
     "showreel": {
       "title": "SHOWREEL",
@@ -31,35 +31,142 @@ window.__CONTENT__ = {
         "id": "xcp",
         "name": "宣传片 · 剪辑",
         "note": "赛事 / 培训 / 展会",
-        "coverImage": ""
+        "coverImage": "",
+        "level": ""
       },
       {
         "id": "ae",
         "name": "Ae 动效包装",
         "note": "MG / UI / 品类 / 买量",
-        "coverImage": ""
+        "coverImage": "",
+        "level": ""
       },
       {
         "id": "short",
         "name": "短视频 · 拍摄+剪辑",
         "note": "口播 / 数码 / 本地生活",
-        "coverImage": ""
+        "coverImage": "",
+        "level": ""
       },
       {
         "id": "aigc",
         "name": "AIGC 生成 + 剪辑",
         "note": "AI 漫剧 / 古风 / 品宣",
-        "coverImage": ""
+        "coverImage": "",
+        "level": ""
       },
       {
         "id": "mix",
         "name": "个人风格混剪",
         "note": "情绪 / 卡点 / 调色",
-        "coverImage": ""
+        "coverImage": "",
+        "level": ""
       }
     ],
     "tools": "Premiere Pro, After Effects, DaVinci Resolve, Photoshop, Audition, Midjourney, AI 视频生成, 剪映专业版",
-    "workflow": "沟通脚本与素材 → 粗剪定结构 → 精剪调节奏、铺声音 → 调色与包装 → 交付多平台版本。"
+    "workflow": "沟通脚本与素材 → 粗剪定结构 → 精剪调节奏、铺声音 → 调色与包装 → 交付多平台版本。",
+    "card": {
+      "libraryColumns": 3,
+      "featuredTags": 3,
+      "libraryTags": 2
+    },
+    "brands": [],
+    "featured": [
+      {
+        "work": "w01"
+      },
+      {
+        "work": "w04"
+      },
+      {
+        "work": "w13"
+      },
+      {
+        "work": "w21"
+      },
+      {
+        "work": "w22"
+      },
+      {
+        "work": "w31"
+      }
+    ],
+    "texts": {
+      "nav": {
+        "featured": "精选",
+        "works": "作品库",
+        "about": "关于",
+        "contact": "联系"
+      },
+      "hero": {
+        "eyebrow": "CLIP · MOTION · AIGC",
+        "btnReel": "播放 Showreel",
+        "btnWorks": "浏览作品库",
+        "stat1": "成片作品",
+        "stat2": "能力方向",
+        "stat3": "合作主体"
+      },
+      "ability": {
+        "kicker": "ABILITIES",
+        "title": "五类能力，一条成片链",
+        "aside": "从叙事剪辑到动效包装，再到 AI 生成与混剪。不同预算、不同周期，都能交付。"
+      },
+      "featured": {
+        "kicker": "SELECTED",
+        "title": "精选作品",
+        "aside": "先看这几支。完整作品库按分类展开，共 {count} 支。"
+      },
+      "works": {
+        "kicker": "ARCHIVE",
+        "title": "完整作品库",
+        "aside": "按能力分类筛选，点任意作品查看详情，详情页支持 ← → 连续翻阅。",
+        "filterAll": "全部",
+        "badgeFeatured": "精选"
+      },
+      "about": {
+        "kicker": "ABOUT",
+        "title": "关于我",
+        "aside": "一个人在一条链上完成：剪辑、动效、包装、调色，以及 AI 生成。",
+        "outputTitle": "产出分布",
+        "outputKicker": "OUTPUT",
+        "brandsTitle": "合作与项目",
+        "brandsKicker": "BRANDS & PROJECTS",
+        "toolsTitle": "工具链",
+        "toolsKicker": "TOOLKIT",
+        "workflowTitle": "工作方式",
+        "workflowKicker": "WORKFLOW",
+        "brandsEmpty": "待补充"
+      },
+      "contact": {
+        "kicker": "CONTACT",
+        "title": "聊聊下一支片子",
+        "aside": "档期、报价、样片需求，直接说需求就行。",
+        "labelEmail": "Email",
+        "labelWechat": "WeChat",
+        "labelBilibili": "Bilibili",
+        "labelFeishu": "Feishu",
+        "feishuValue": "在线作品集"
+      },
+      "footer": {
+        "copyright": "保留所有权利",
+        "backTop": "回到顶部 ↑"
+      },
+      "modal": {
+        "videoPending": "视频待上传",
+        "videoPendingHint": "在后台「作品库」里给这条作品填上 B 站链接，或填一个本地 mp4 路径，这里就会变成播放器。",
+        "metaCat": "分类",
+        "metaClient": "客户",
+        "metaYear": "年份",
+        "metaRole": "职责",
+        "metaDur": "时长",
+        "durationFallback": "待补",
+        "reelType": "Showreel",
+        "reelDesc": "精选片段：剪辑、动效包装与 AIGC 的合集。",
+        "reelLabelType": "类型",
+        "reelLabelContent": "内容",
+        "reelLabelNote": "说明"
+      }
+    }
   },
   "works": [
     {
