@@ -1,0 +1,247 @@
+/* =========================================================================
+   作品集后台主题 —— 与展示页同一套「炭灰浮雕 + 暖橙」
+   只作用于 /admin，不影响公共页面。
+   Decap 用 emotion 生成 css-xxx-组件名 形式的类名，所以按组件名匹配。
+   ========================================================================= */
+
+:root{
+  --cms-bg:#24272d;
+  --cms-surface:#2a2e36;
+  --cms-surface-2:#2f343d;
+  --cms-line:rgba(234,237,242,.10);
+  --cms-ink:#eaedf2;
+  --cms-ink-2:#cfd6e0;
+  --cms-dim:#9ba2ae;
+  --cms-accent:#ff7a4d;
+  --cms-accent-ink:#241812;
+}
+
+html,body{
+  background:var(--cms-bg) !important;
+  color:var(--cms-ink) !important;
+  font-family:"PingFang SC","Microsoft YaHei UI","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif !important;
+}
+#nc-root{ background:var(--cms-bg); color:var(--cms-ink); min-height:100vh }
+
+/* ---------- 登录页 ---------- */
+[class*="StyledAuthenticationPage"]{
+  background:var(--cms-bg) !important;
+}
+[class*="LoginButton"]{
+  background:var(--cms-accent) !important;
+  color:var(--cms-accent-ink) !important;
+  border:0 !important;
+  border-radius:12px !important;
+  font-weight:700 !important;
+  padding:10px 26px !important;
+  box-shadow:0 8px 20px rgba(255,122,77,.25) !important;
+}
+[class*="LoginButton"]:hover{
+  background:#ff8f68 !important;
+}
+[class*="CustomIconWrapper"]{
+  background:var(--cms-surface) !important;
+  border-radius:20px !important;
+  padding:10px !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+/* ---------- 顶栏 ---------- */
+[class*="AppHeaderContent"]{
+  background:var(--cms-surface) !important;
+  border-bottom:1px solid var(--cms-line) !important;
+  color:var(--cms-ink) !important;
+}
+[class*="AppHeaderButton"],[class*="AppHeaderLink"],[class*="AppHeaderNavList"] *{
+  color:var(--cms-ink-2) !important;
+}
+[class*="AppHeaderButton"]:hover,[class*="AppHeaderLink"]:hover{
+  color:var(--cms-accent) !important;
+  background:transparent !important;
+}
+[class*="avatarImage"]{
+  border:1px solid var(--cms-accent) !important;
+  background:var(--cms-surface-2) !important;
+}
+
+/* ---------- 主区 / 侧栏 ---------- */
+[class*="AppMainContainer"]{
+  background:var(--cms-bg) !important;
+  color:var(--cms-ink) !important;
+}
+[class*="SidebarNavLink"]{
+  color:var(--cms-ink-2) !important;
+  border-radius:10px !important;
+}
+[class*="SidebarNavLink"]:hover{
+  background:var(--cms-surface-2) !important;
+  color:var(--cms-ink) !important;
+}
+[class*="SidebarNavLink"][aria-current="page"],
+[class*="SidebarNavLink"].active{
+  background:var(--cms-surface-2) !important;
+  color:var(--cms-accent) !important;
+  font-weight:600 !important;
+}
+
+/* ---------- 卡片 / 条目 ---------- */
+[class*="card"],[class*="ListCardLink"],[class*="CollectionTopRow"]{
+  background:var(--cms-surface) !important;
+  border:1px solid var(--cms-line) !important;
+  border-radius:14px !important;
+  color:var(--cms-ink) !important;
+  box-shadow:0 10px 26px rgba(0,0,0,.28) !important;
+}
+[class*="cardTopHeading"],[class*="ListCardTitle"],[class*="TitleIcons"]{
+  color:var(--cms-ink) !important;
+}
+[class*="ListCardLink"]:hover{
+  border-color:rgba(255,122,77,.45) !important;
+  transform:translateY(-1px);
+}
+
+/* ---------- 输入与搜索 ---------- */
+[class*="InputContainer"]{
+  background:var(--cms-surface-2) !important;
+  border:1px solid #3a4049 !important;
+  border-radius:10px !important;
+}
+input,textarea,select{
+  background:transparent !important;
+  color:var(--cms-ink) !important;
+}
+input::placeholder,textarea::placeholder{ color:#7c8593 !important }
+[class*="SearchContainer"] [class*="InputContainer"]{
+  background:var(--cms-surface-2) !important;
+}
+
+/* ---------- 通用按钮 ---------- */
+button:not([class*="LoginButton"]){
+  border-radius:10px !important;
+}
+[class*="Toolbar"] button:hover{
+  color:var(--cms-accent) !important;
+}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar{ width:10px; height:10px }
+::-webkit-scrollbar-track{ background:var(--cms-bg) }
+::-webkit-scrollbar-thumb{ background:#3a4049; border-radius:6px }
+::-webkit-scrollbar-thumb:hover{ background:#4a515c }
+
+/* ---------- 选中文字 ---------- */
+::selection{ background:var(--cms-accent); color:var(--cms-accent-ink) }
+
+/* =========================================================================
+   编辑区（表单 + 预览）
+   ========================================================================= */
+[class*="EditorContainer"],
+[class*="ControlPaneContainer"],
+[class*="ControlContainer"],
+[class*="splitPane"],
+[class*="Editor"]{
+  background:var(--cms-bg) !important;
+  color:var(--cms-ink) !important;
+}
+
+/* 顶部工具条 */
+[class*="ToolbarContainer"],
+[class*="ControlTopbar"],
+[class*="TopBarContainer"]{
+  background:var(--cms-surface) !important;
+  border-color:var(--cms-line) !important;
+  color:var(--cms-ink) !important;
+  box-shadow:none !important;
+}
+[class*="ToolbarContainer"] *,
+[class*="ControlTopbar"] *{ color:var(--cms-ink-2) !important }
+
+/* 字段标签与提示 */
+[class*="fieldLabel"]{
+  color:var(--cms-ink) !important;
+  background:transparent !important;
+  font-weight:600 !important;
+}
+[class*="ControlHint"]{ color:var(--cms-dim) !important }
+[class*="ControlContainer"] label{ color:var(--cms-ink-2) !important }
+
+/* 输入控件 */
+[class*="ControlContainer"] input:not([type="checkbox"]):not([type="radio"]),
+[class*="ControlContainer"] textarea,
+[class*="ControlContainer"] select{
+  background:var(--cms-surface-2) !important;
+  color:var(--cms-ink) !important;
+  border:1px solid #3a4049 !important;
+  border-radius:9px !important;
+}
+[class*="ControlContainer"] input:focus,
+[class*="ControlContainer"] textarea:focus{
+  border-color:var(--cms-accent) !important;
+  box-shadow:0 0 0 3px rgba(255,122,77,.16) !important;
+}
+
+/* 折叠分组头（个人信息 / Showreel 那一排） */
+[class*="ExpandButtonContainer"]{ background:var(--cms-surface-2) !important }
+[class*="ExpandButtonContainer"] *{ color:var(--cms-ink) !important }
+
+/* 预览区与右上角控件 */
+[class*="PreviewPaneContainer"]{ background:var(--cms-bg) !important }
+[class*="PreviewPaneFrame"]{ background:#1b1e23 !important; border:1px solid var(--cms-line) !important }
+[class*="ViewControls"]{ background:var(--cms-surface) !important; border-color:var(--cms-line) !important }
+[class*="ViewControls"] *{ color:var(--cms-ink-2) !important }
+
+/* 已发布 / 状态徽标 */
+[class*="publishedButton"], [class*="textBadgeSuccess"]{
+  background:rgba(255,122,77,.15) !important;
+  color:var(--cms-accent) !important;
+  border:1px solid rgba(255,122,77,.35) !important;
+  border-radius:8px !important;
+  padding:4px 12px !important;
+}
+
+/* 侧栏图标统一暖橙 */
+[class*="SidebarNavLink"] svg,
+[class*="AppHeaderButton"] svg,
+[class*="cardTop"] svg,
+[class*="ViewControls"] svg{
+  color:var(--cms-accent) !important;
+  fill:var(--cms-accent) !important;
+  opacity:.9;
+}
+
+/* 去掉侧栏条目的深色缺口 */
+[class*="SidebarNavLink"]::before,
+[class*="SidebarNavLink"]::after{ background:transparent !important; border:0 !important }
+
+/* =========================================================================
+   编辑面板兜底：Decap 的行容器用的是哈希类名，无法按名定位，
+   这里在面板范围内清掉所有 div 底色，再单独给输入框/按钮/徽标重新上色。
+   ========================================================================= */
+[class*="ControlPaneContainer"] div{
+  background-color:transparent !important;
+}
+[class*="ControlPaneContainer"] > div{
+  background-color:var(--cms-bg) !important;
+}
+[class*="ControlPaneContainer"] input:not([type="checkbox"]):not([type="radio"]),
+[class*="ControlPaneContainer"] textarea,
+[class*="ControlPaneContainer"] select{
+  background-color:var(--cms-surface-2) !important;
+  color:var(--cms-ink) !important;
+  border:1px solid #3a4049 !important;
+  border-radius:9px !important;
+}
+[class*="ControlPaneContainer"] button{
+  background-color:var(--cms-surface-2) !important;
+  color:var(--cms-ink) !important;
+  border-color:var(--cms-line) !important;
+  border-radius:9px !important;
+}
+[class*="ControlPaneContainer"] button:hover{
+  background-color:#363c46 !important;
+  color:var(--cms-accent) !important;
+}
+[class*="ControlPaneContainer"] [class*="ExpandButtonContainer"],
+[class*="ControlPaneContainer"] [class*="ExpandButtonContainer"] div{
+  background-color:var(--cms-surface-2) !important;
+}

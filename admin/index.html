@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>作品集后台</title>
+  <link rel="stylesheet" href="./theme.css">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <style>
     /* 后台加载完成前的占位，避免白屏 */
@@ -19,7 +20,7 @@
   <noscript><p style="padding:24px">后台需要 JavaScript，请换用 Chrome / Edge 打开。</p></noscript>
 
   <!-- Decap CMS 只在后台加载，公共页面不引用 -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script src="./decap-cms.js"></script>
   <script>
     // CMS 接管后隐藏占位
     window.addEventListener("load", () => {

@@ -67,6 +67,75 @@ collections:
               - { name: name, label: 显示名称, widget: string }
               - { name: note, label: 副标题, widget: string, required: false }
               - { name: coverImage, label: 代表图（留空自动取该类第一个作品的封面）, widget: image, required: false }
+              - { name: level, label: 百分比 0-100（留空则按作品数自动算）, widget: number, value_type: int, required: false, min: 0, max: 100 }
+
+          - name: card
+            label: 卡片显示
+            widget: object
+            collapsed: true
+            required: false
+            fields:
+              - { name: libraryColumns, label: 作品库列数（桌面端 2-4）, widget: number, value_type: int, required: false, default: 3, min: 2, max: 4 }
+              - { name: featuredTags, label: 精选大卡显示几个标签, widget: number, value_type: int, required: false, default: 3, min: 0, max: 6 }
+              - { name: libraryTags, label: 作品库小卡显示几个标签, widget: number, value_type: int, required: false, default: 2, min: 0, max: 6 }
+
+          - name: brands
+            label: 合作与项目（手动维护）
+            widget: list
+            required: false
+            summary: '{{fields.name}}'
+            hint: 列表为空时会自动从所有作品的「客户」字段里提取品牌名
+            fields:
+              - { name: name, label: 名称, widget: string }
+              - { name: logo, label: Logo 图片（留空显示文字）, widget: image, required: false }
+              - { name: url, label: 链接（可留空）, widget: string, required: false }
+              - { name: hidden, label: 不显示这一项, widget: boolean, default: false }
+
+          - name: featured
+            label: 首页精选（用箭头调整顺序）
+            widget: list
+            required: false
+            summary: '{{fields.work}}'
+            hint: 想换掉某一支就在下拉里改选；清空列表会回落到每支作品的「放进首页精选」开关
+            fields:
+              - name: work
+                label: 选择作品
+                widget: select
+                options:
+                  # >>> featured-options
+                  - { label: '2025 蓉漂杯巾帼科技创新赛（w01）', value: w01 }
+                  - { label: '华泰赋能舱 · 星越计划纪实（w02）', value: w02 }
+                  - { label: '玛莱宝 · 广州展会宣传包装（w03）', value: w03 }
+                  - { label: '灵笼 · 时尚品类动效（w04）', value: w04 }
+                  - { label: '灵笼 · 宠物品类动效（w05）', value: w05 }
+                  - { label: '美妆品类包装（w06）', value: w06 }
+                  - { label: 'UI 动效设计（w07）', value: w07 }
+                  - { label: '地图类信息动效（w08）', value: w08 }
+                  - { label: '国际物流特效包装（w09）', value: w09 }
+                  - { label: '科技包装（w10）', value: w10 }
+                  - { label: '游戏买量素材（w11）', value: w11 }
+                  - { label: '火柴人心理学（w12）', value: w12 }
+                  - { label: '美团 OTA 酒店运营（w13）', value: w13 }
+                  - { label: 'vivo · iQOO 双11（w14）', value: w14 }
+                  - { label: 'iQOO Neo 10 Pro 新品（w15）', value: w15 }
+                  - { label: 'iQOO Z9 Turbo 机型展示（w16）', value: w16 }
+                  - { label: 'iQOO Z9X 机型展示（w17）', value: w17 }
+                  - { label: '防水测试 · 数码种草（w18）', value: w18 }
+                  - { label: '手机选 iQOO · 游戏向（w19）', value: w19 }
+                  - { label: '个人定制短片（w20）', value: w20 }
+                  - { label: 'DeepSeek Harness · Moss 开机动画（w21）', value: w21 }
+                  - { label: 'LibTV 超跑短片（w22）', value: w22 }
+                  - { label: '云朵抓夹 · AI 品宣 ①（w23）', value: w23 }
+                  - { label: '云朵发夹 · AI 品宣 ②（w24）', value: w24 }
+                  - { label: '紫罗兰的永恒花园 · AI 调色（w25）', value: w25 }
+                  - { label: '午夜画廊（w26）', value: w26 }
+                  - { label: 'AI 漫剧片段（w27）', value: w27 }
+                  - { label: 'AI 古风修仙 ①（w28）', value: w28 }
+                  - { label: 'AI 古风修仙 ②（w29）', value: w29 }
+                  - { label: 'AI 古风修仙 ③（w30）', value: w30 }
+                  - { label: '2025.06 生活不是电影（w31）', value: w31 }
+                  - { label: '2025.08 欢迎来到开发者模式（w32）', value: w32 }
+                  # <<< featured-options
 
           - { name: tools, label: 工具链, widget: string, hint: "用逗号分隔，例如：Premiere Pro, After Effects, DaVinci Resolve" }
           - { name: workflow, label: 工作方式, widget: text, required: false }
@@ -92,7 +161,7 @@ collections:
               - { name: hidden, label: 隐藏这个作品位, widget: boolean, default: false, hint: "勾上后不出现在精选、全库和分类计数里，随时可以取消" }
               - { name: featured, label: 放进首页精选, widget: boolean, default: false }
               - { name: title, label: 标题, widget: string }
-              - { name: id, label: 唯一编号（不要改）, widget: string, hint: "例如 w01，和封面文件名对应" }
+              - { name: id, label: 唯一编号（可留空）, widget: string, required: false, hint: '留空会自动生成；建议保持 w01 这种格式，和封面文件名对应' }
               - name: cat
                 label: 分类
                 widget: select
@@ -104,6 +173,11 @@ collections:
                   - { label: 个人风格混剪, value: mix }
               - { name: client, label: 客户 / 品牌, widget: string, required: false }
               - { name: year, label: 年份, widget: string, required: false }
+              - name: cardSubtitle
+                label: 卡片副标题
+                widget: string
+                required: false
+                hint: 卡片第二行。留空则自动拼「分类 · 客户 · 年份」；想自己写一句就填这里，会整行替换
               - { name: role, label: 职责, widget: string, required: false }
               - { name: dur, label: 时长（可留空）, widget: string, required: false, hint: "例如 02:14" }
               - { name: tags, label: 标签, widget: string, required: false, hint: "用 / 或逗号分隔，例如：宣传片, 赛事" }
@@ -111,3 +185,116 @@ collections:
               - { name: bilibili, label: B 站链接或 BV 号, widget: string, required: false, hint: "填 BV 号或完整播放页链接，保存后详情页就能播放" }
               - { name: video, label: 本地 mp4 路径, widget: string, required: false, hint: "例如 assets/videos/w01.mp4；填了 B 站则以 B 站优先" }
               - { name: cover, label: 封面图, widget: image, required: false, hint: "留空自动用 assets/covers/<编号>.jpg" }
+
+  # ------------------------------------------------------------------
+  #  页面文案（各区块的标题与说明）
+  # ------------------------------------------------------------------
+  - name: texts
+    label: 页面文案
+    delete: false
+    files:
+      - name: texts
+        label: 全部文案
+        file: content/texts.json
+        fields:
+          - name: nav
+            label: 导航
+            widget: object
+            collapsed: true
+            fields:
+              - { name: featured, label: 精选, widget: string }
+              - { name: works, label: 作品库, widget: string }
+              - { name: about, label: 关于, widget: string }
+              - { name: contact, label: 联系, widget: string }
+          - name: hero
+            label: 首屏
+            widget: object
+            collapsed: true
+            fields:
+              - { name: eyebrow, label: 顶部小字（如 CLIP · MOTION · AIGC）, widget: string }
+              - { name: btnReel, label: 主按钮文字, widget: string }
+              - { name: btnWorks, label: 次按钮文字, widget: string }
+              - { name: stat1, label: 数据 1 的说明, widget: string }
+              - { name: stat2, label: 数据 2 的说明, widget: string }
+              - { name: stat3, label: 数据 3 的说明, widget: string }
+          - name: ability
+            label: 能力速览
+            widget: object
+            collapsed: true
+            fields:
+              - { name: kicker, label: 小标题（英文）, widget: string }
+              - { name: title, label: 标题, widget: string }
+              - { name: aside, label: 右侧说明, widget: text }
+          - name: featured
+            label: 精选作品
+            widget: object
+            collapsed: true
+            fields:
+              - { name: kicker, label: 小标题（英文）, widget: string }
+              - { name: title, label: 标题, widget: string }
+              - { name: aside, label: 右侧说明, widget: text, hint: '作品总数会自动填进 {count} 的位置' }
+          - name: works
+            label: 完整作品库
+            widget: object
+            collapsed: true
+            fields:
+              - { name: kicker, label: 小标题（英文）, widget: string }
+              - { name: title, label: 标题, widget: string }
+              - { name: aside, label: 右侧说明, widget: text }
+              - { name: filterAll, label: 筛选条第一项, widget: string }
+              - { name: badgeFeatured, label: 精选角标文字, widget: string }
+          - name: about
+            label: 关于
+            widget: object
+            collapsed: true
+            fields:
+              - { name: kicker, label: 小标题（英文）, widget: string }
+              - { name: title, label: 标题, widget: string }
+              - { name: aside, label: 右侧说明, widget: text }
+              - { name: outputTitle, label: 区块名 · 产出分布, widget: string }
+              - { name: outputKicker, label: 产出分布 · 英文小字, widget: string }
+              - { name: brandsTitle, label: 区块名 · 合作与项目, widget: string }
+              - { name: brandsKicker, label: 合作与项目 · 英文小字, widget: string }
+              - { name: brandsEmpty, label: 没有合作方时的占位, widget: string }
+              - { name: toolsTitle, label: 区块名 · 工具链, widget: string }
+              - { name: toolsKicker, label: 工具链 · 英文小字, widget: string }
+              - { name: workflowTitle, label: 区块名 · 工作方式, widget: string }
+              - { name: workflowKicker, label: 工作方式 · 英文小字, widget: string }
+          - name: contact
+            label: 联系
+            widget: object
+            collapsed: true
+            fields:
+              - { name: kicker, label: 小标题（英文）, widget: string }
+              - { name: title, label: 标题, widget: string }
+              - { name: aside, label: 右侧说明, widget: text }
+              - { name: labelEmail, label: 邮箱卡片标签, widget: string }
+              - { name: labelWechat, label: 微信卡片标签, widget: string }
+              - { name: labelBilibili, label: B 站卡片标签, widget: string }
+              - { name: labelFeishu, label: 飞书卡片标签, widget: string }
+              - { name: feishuValue, label: 飞书卡片的显示值, widget: string }
+          - name: footer
+            label: 页脚
+            widget: object
+            collapsed: true
+            fields:
+              - { name: copyright, label: 版权说明, widget: string }
+              - { name: backTop, label: 回到顶部按钮, widget: string }
+          - name: modal
+            label: 作品详情弹层
+            widget: object
+            collapsed: true
+            fields:
+              - { name: videoPending, label: 没视频时的标题, widget: string }
+              - { name: videoPendingHint, label: 没视频时的说明, widget: text }
+              - { name: metaCat, label: 元信息 · 分类, widget: string }
+              - { name: metaClient, label: 元信息 · 客户, widget: string }
+              - { name: metaYear, label: 元信息 · 年份, widget: string }
+              - { name: metaRole, label: 元信息 · 职责, widget: string }
+              - { name: metaDur, label: 元信息 · 时长, widget: string }
+              - { name: durationFallback, label: 时长为空时显示, widget: string }
+              - { name: reelType, label: Showreel 类型值, widget: string }
+              - { name: reelDesc, label: Showreel 简介, widget: text }
+              - { name: reelLabelType, label: Showreel · 类型标签, widget: string }
+              - { name: reelLabelContent, label: Showreel · 内容标签, widget: string }
+              - { name: reelLabelNote, label: Showreel · 说明标签, widget: string }
