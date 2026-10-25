@@ -1,18 +1,18 @@
 {
   "me": {
-    "name": "王榕兵",
-    "en": "WANG RONGBING",
-    "role": "剪辑师",
-    "units": "剪辑 / 动效包装 / AIGC",
     "headlineTop": "把故事",
-    "headlineBottom": "剪进节奏里",
-    "headlineAccent": "节奏",
-    "tagline": "剪辑师 / 动效包装 / AIGC。\n宣传片、短视频、MG 动效与 AI 生成 —— 把叙事、节奏和画面握在同一双手里。",
-    "status": "可接片",
-    "email": "hello@example.com",
     "wechat": "your_wechat",
     "bilibili": "https://space.bilibili.com/000000000",
-    "feishu": "https://zqq5cr7upp9.feishu.cn/wiki/WZmewobubiSGmukpmjqcx9nPn1b"
+    "en": "WANG RONGBING",
+    "name": "王榕兵",
+    "tagline": "剪辑师 / 动效包装 / AIGC。\n宣传片、短视频、MG 动效与 AI 生成 \n把叙事、节奏和画面握在同一双手里。",
+    "units": "剪辑 / 动效包装 / AIGC",
+    "status": "可接片",
+    "role": "剪辑师",
+    "feishu": "https://zqq5cr7upp9.feishu.cn/wiki/WZmewobubiSGmukpmjqcx9nPn1b",
+    "email": "hello@example.com",
+    "headlineAccent": "节奏",
+    "headlineBottom": "剪进节奏里"
   },
   "showreel": {
     "title": "SHOWREEL",
