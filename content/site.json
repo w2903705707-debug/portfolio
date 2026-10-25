@@ -1,0 +1,58 @@
+{
+  "me": {
+    "name": "王榕兵",
+    "en": "WANG RONGBING",
+    "role": "剪辑师",
+    "units": "剪辑 / 动效包装 / AIGC",
+    "headlineTop": "把故事",
+    "headlineBottom": "剪进节奏里",
+    "headlineAccent": "节奏",
+    "tagline": "剪辑师 / 动效包装 / AIGC。\n宣传片、短视频、MG 动效与 AI 生成 —— 把叙事、节奏和画面握在同一双手里。",
+    "status": "可接片",
+    "email": "hello@example.com",
+    "wechat": "your_wechat",
+    "bilibili": "https://space.bilibili.com/000000000",
+    "feishu": "https://zqq5cr7upp9.feishu.cn/wiki/WZmewobubiSGmukpmjqcx9nPn1b"
+  },
+  "showreel": {
+    "title": "SHOWREEL",
+    "note": "剪辑 · 动效 · AI",
+    "cover": "",
+    "bilibili": "",
+    "video": ""
+  },
+  "categories": [
+    {
+      "id": "xcp",
+      "name": "宣传片 · 剪辑",
+      "note": "赛事 / 培训 / 展会",
+      "coverImage": ""
+    },
+    {
+      "id": "ae",
+      "name": "Ae 动效包装",
+      "note": "MG / UI / 品类 / 买量",
+      "coverImage": ""
+    },
+    {
+      "id": "short",
+      "name": "短视频 · 拍摄+剪辑",
+      "note": "口播 / 数码 / 本地生活",
+      "coverImage": ""
+    },
+    {
+      "id": "aigc",
+      "name": "AIGC 生成 + 剪辑",
+      "note": "AI 漫剧 / 古风 / 品宣",
+      "coverImage": ""
+    },
+    {
+      "id": "mix",
+      "name": "个人风格混剪",
+      "note": "情绪 / 卡点 / 调色",
+      "coverImage": ""
+    }
+  ],
+  "tools": "Premiere Pro, After Effects, DaVinci Resolve, Photoshop, Audition, Midjourney, AI 视频生成, 剪映专业版",
+  "workflow": "沟通脚本与素材 → 粗剪定结构 → 精剪调节奏、铺声音 → 调色与包装 → 交付多平台版本。"
+}

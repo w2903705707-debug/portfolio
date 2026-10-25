@@ -1,0 +1,14 @@
+# 开发产物与本地文件，不进仓库
+shots/
+preview/
+app.before-cms.js
+*.bak
+*.log
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 依赖（本项目不需要，占位防止误提交）
+node_modules/

@@ -1,0 +1,113 @@
+# =====================================================================
+#  作品集后台配置（Decap CMS）
+#  改动后保存 → Netlify 自动构建 → 线上生效
+#  ⚠️ 第一次用之前，把下面的 repo 改成你自己的 GitHub 仓库
+# =====================================================================
+
+backend:
+  name: github
+  repo: w2903705707-debug/portfolio
+  branch: main
+  # Netlify 托管的 GitHub 认证（需要在 Netlify 站点设置里配置 GitHub OAuth）
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+locale: zh_Hans
+display_url: 剪辑师作品集
+logo_url: ../assets/favicon.svg
+media_folder: "assets/covers"
+public_folder: "/assets/covers"
+publish_mode: simple
+
+collections:
+  # ------------------------------------------------------------------
+  #  站点设置
+  # ------------------------------------------------------------------
+  - name: settings
+    label: 站点设置
+    delete: false
+    files:
+      - name: site
+        label: 个人信息与站点设置
+        file: content/site.json
+        fields:
+          - name: me
+            label: 个人信息
+            widget: object
+            fields:
+              - { name: name, label: 中文名, widget: string }
+              - { name: en, label: 英文名（导航左侧）, widget: string }
+              - { name: role, label: 身份, widget: string, default: 剪辑师 }
+              - { name: units, label: 身份补充, widget: string, hint: "用 / 或逗号分隔，例如：剪辑 / 动效包装 / AIGC" }
+              - { name: headlineTop, label: 大标题 · 第一行, widget: string }
+              - { name: headlineBottom, label: 大标题 · 第二行, widget: string }
+              - { name: headlineAccent, label: 大标题 · 高亮词, widget: string, hint: "从第二行里挑一个词染成暖橙，例如：节奏" }
+              - { name: tagline, label: 一句话简介, widget: text, hint: "换行会显示为分行的换行符" }
+              - { name: status, label: 状态徽标, widget: string, hint: "例如：可接片" }
+              - { name: email, label: 邮箱, widget: string }
+              - { name: wechat, label: 微信号, widget: string }
+              - { name: bilibili, label: B 站主页, widget: string }
+              - { name: feishu, label: 飞书链接（可留空）, widget: string, required: false }
+
+          - name: showreel
+            label: Showreel 大卡
+            widget: object
+            fields:
+              - { name: title, label: 标题, widget: string, default: SHOWREEL }
+              - { name: note, label: 右下角小字, widget: string, required: false }
+              - { name: cover, label: 封面图, widget: image, required: false }
+              - { name: bilibili, label: B 站链接或 BV 号, widget: string, required: false, hint: "留空则显示占位" }
+              - { name: video, label: 本地 mp4 路径, widget: string, required: false }
+
+          - name: categories
+            label: 能力分类
+            widget: list
+            fields:
+              - { name: id, label: 编号（不要改，作品靠它关联）, widget: string }
+              - { name: name, label: 显示名称, widget: string }
+              - { name: note, label: 副标题, widget: string, required: false }
+              - { name: coverImage, label: 代表图（留空自动取该类第一个作品的封面）, widget: image, required: false }
+
+          - { name: tools, label: 工具链, widget: string, hint: "用逗号分隔，例如：Premiere Pro, After Effects, DaVinci Resolve" }
+          - { name: workflow, label: 工作方式, widget: text, required: false }
+
+  # ------------------------------------------------------------------
+  #  作品库
+  # ------------------------------------------------------------------
+  - name: works
+    label: 作品库
+    delete: false
+    files:
+      - name: works
+        label: 全部作品
+        file: content/works.json
+        fields:
+          - name: items
+            label: 作品列表
+            label_singular: 作品
+            widget: list
+            summary: "{{fields.order}} · {{fields.title}}"
+            fields:
+              - { name: order, label: 排序（越小越靠前）, widget: number, value_type: int, default: 99 }
+              - { name: hidden, label: 隐藏这个作品位, widget: boolean, default: false, hint: "勾上后不出现在精选、全库和分类计数里，随时可以取消" }
+              - { name: featured, label: 放进首页精选, widget: boolean, default: false }
+              - { name: title, label: 标题, widget: string }
+              - { name: id, label: 唯一编号（不要改）, widget: string, hint: "例如 w01，和封面文件名对应" }
+              - name: cat
+                label: 分类
+                widget: select
+                options:
+                  - { label: 宣传片 · 剪辑, value: xcp }
+                  - { label: Ae 动效包装, value: ae }
+                  - { label: 短视频 · 拍摄+剪辑, value: short }
+                  - { label: AIGC 生成 + 剪辑, value: aigc }
+                  - { label: 个人风格混剪, value: mix }
+              - { name: client, label: 客户 / 品牌, widget: string, required: false }
+              - { name: year, label: 年份, widget: string, required: false }
+              - { name: role, label: 职责, widget: string, required: false }
+              - { name: dur, label: 时长（可留空）, widget: string, required: false, hint: "例如 02:14" }
+              - { name: tags, label: 标签, widget: string, required: false, hint: "用 / 或逗号分隔，例如：宣传片, 赛事" }
+              - { name: desc, label: 简介, widget: text, required: false }
+              - { name: bilibili, label: B 站链接或 BV 号, widget: string, required: false, hint: "填 BV 号或完整播放页链接，保存后详情页就能播放" }
+              - { name: video, label: 本地 mp4 路径, widget: string, required: false, hint: "例如 assets/videos/w01.mp4；填了 B 站则以 B 站优先" }
+              - { name: cover, label: 封面图, widget: image, required: false, hint: "留空自动用 assets/covers/<编号>.jpg" }
