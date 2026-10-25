@@ -312,8 +312,8 @@ h1 .accent{color:var(--accent)}
    ========================================================================== */
 .grid{display:grid;gap:var(--gap)}
 
-.featured-grid{grid-template-columns:repeat(2,1fr);gap:28px}
-.library-grid{grid-template-columns:repeat(3,1fr)}
+.featured-grid{grid-template-columns:repeat(var(--feat-cols,2),1fr);gap:28px}
+.library-grid{grid-template-columns:repeat(var(--lib-cols,3),1fr)}
 
 .card{
   position:relative;
@@ -608,7 +608,7 @@ h1 .accent{color:var(--accent)}
    响应式
    ========================================================================== */
 @media (max-width:1199px){
-  .library-grid{grid-template-columns:repeat(2,1fr)}
+  .library-grid{grid-template-columns:repeat(min(var(--lib-cols,3),2),1fr)}
   .ability{grid-template-columns:repeat(3,1fr)}
   .contact-grid{grid-template-columns:repeat(2,1fr)}
   .hero-grid{gap:36px}
@@ -677,3 +677,21 @@ h1 .accent{color:var(--accent)}
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
 }
+
+/* ---------- 合作方 logo 标签（后台可上传 logo 后启用）---------- */
+.brand-item.has-logo{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 14px;min-height:44px;min-width:88px;
+  transition:box-shadow .2s var(--ease),transform .2s var(--ease);
+}
+.brand-item.has-logo img{
+  display:block;height:22px;width:auto;max-width:120px;object-fit:contain;
+  opacity:.86;filter:grayscale(1) brightness(1.35);
+  transition:opacity .2s var(--ease),filter .2s var(--ease);
+}
+a.brand-item.has-logo:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+a.brand-item.has-logo:hover img{opacity:1;filter:none}
+.brand-item .brand-txt{font-size:12.5px}
+
+/* 封面缺失时露出深色画框，不显示裂图图标 */
+.card .frame img.img-missing{opacity:0}

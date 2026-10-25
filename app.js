@@ -35,13 +35,28 @@ const CONFIG = (() => {
   if (!raw) return null;
   const site = raw.site || {};
   const me = site.me || {};
+  const works = normalizeWorks(raw.works || []);
+
+  /* 精选清单（有序）优先；清单为空时回落到每条作品的 featured 开关 */
+  const featuredIds = (Array.isArray(site.featured) ? site.featured : [])
+    .map((x) => (typeof x === "string" ? x : x && (x.work || x.id)))
+    .filter(Boolean);
+  if (featuredIds.length) {
+    const set = new Set(featuredIds);
+    works.forEach((w) => { w.featured = set.has(w.id); });
+  }
+
   return {
     me: { ...me, units: splitList(me.units) },
     showreel: site.showreel || {},
     categories: (site.categories || []).filter((c) => c && c.id),
+    brands: Array.isArray(site.brands) ? site.brands : [],
+    card: site.card || {},
+    featuredIds,
     tools: splitList(site.tools),
     workflow: site.workflow || "",
-    works: normalizeWorks(raw.works || []),
+    texts: site.texts || {},
+    works,
   };
 })();
 
@@ -52,6 +67,13 @@ const CONFIG = (() => {
 const $  = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+/* 文案取值：点路径从 content/texts.json 里取，取不到就用页面内置的 fallback */
+const T = (path, fallback = "") => {
+  const src = (CONFIG && CONFIG.texts) || {};
+  const val = String(path).split(".").reduce((o, k) => (o == null ? undefined : o[k]), src);
+  return val == null || val === "" ? fallback : String(val);
+};
 
 const CAT      = Object.fromEntries(CONFIG.categories.map((c) => [c.id, c]));
 const WORK_MAP = Object.fromEntries(CONFIG.works.map((w) => [w.id, w]));
@@ -93,9 +115,28 @@ function videoMarkup(item) {
   }
   return `<div class="ph">
       <div class="ring"></div>
-      <b>视频待上传</b>
-      <span>在后台「作品库」里给这条作品填上 B 站链接，或填一个本地 mp4 路径，这里就会变成播放器。</span>
+      <b>${esc(T("modal.videoPending", "视频待上传"))}</b>
+      <span>${esc(T("modal.videoPendingHint", "在后台「作品库」里给这条作品填上 B 站链接，或填一个本地 mp4 路径，这里就会变成播放器。"))}</span>
     </div>`;
+}
+
+/* ---------------- 页面文案 ---------------- */
+function applyTexts() {
+  // 静态节点：index.html 里带 data-t 的元素
+  $$("[data-t]").forEach((el) => {
+    const v = T(el.dataset.t);
+    if (v) el.textContent = v;
+  });
+
+  // 精选区说明里嵌着作品总数
+  const aside = $("#featuredAside");
+  if (aside) {
+    const tpl = T("featured.aside", "先看这几支。完整作品库按分类展开，共 {count} 支。");
+    aside.innerHTML = esc(tpl).replace("{count}", `<b id="worksCount">${CONFIG.works.length}</b>`);
+  }
+
+  // 浏览器标签页标题
+  document.title = `${CONFIG.me.name} · ${CONFIG.me.role}作品集`;
 }
 
 /* ---------------- Hero ---------------- */
@@ -130,9 +171,9 @@ function renderHero() {
 
   const brandCount = new Set(CONFIG.works.map((w) => (w.client || "").trim()).filter(Boolean)).size;
   $("#heroStats").innerHTML = [
-    { n: CONFIG.works.length, u: "支", t: "成片作品" },
-    { n: CONFIG.categories.length, u: "类", t: "能力方向" },
-    { n: brandCount, u: "+", t: "合作主体" }
+    { n: CONFIG.works.length, u: "支", t: T("hero.stat1", "成片作品") },
+    { n: CONFIG.categories.length, u: "类", t: T("hero.stat2", "能力方向") },
+    { n: brandCount, u: "+", t: T("hero.stat3", "合作主体") }
   ].map((s) => `<div class="stat"><b>${s.n}<i>${s.u}</i></b><span>${s.t}</span></div>`).join("");
 
   $("#reelImg").src = mediaPath(showreel.cover) || "assets/covers/reel.jpg";
@@ -174,19 +215,25 @@ function renderAbilities() {
 /* ---------------- 作品卡 ---------------- */
 function cardHTML(w, big = false) {
   const c = catOf(w);
-  const tags = (w.tags || []).slice(0, big ? 3 : 2);
+  const maxTags = Number(big ? (CONFIG.card.featuredTags ?? 3) : (CONFIG.card.libraryTags ?? 2));
+  const tags = (w.tags || []).slice(0, Number.isFinite(maxTags) ? maxTags : (big ? 3 : 2));
   const sub = [w.client, w.year].filter(Boolean).join(" · ");
+  const subOverride = String(w.cardSubtitle || "").trim();
 
   return `<button class="card" data-id="${esc(w.id)}" aria-label="查看作品：${esc(w.title)}">
       <div class="frame">
-        <img src="${esc(coverOf(w))}" alt="${esc(w.title)} 封面" loading="lazy">
-        ${w.featured ? '<span class="badge badge-tl">精选</span>' : ""}
+        <img src="${esc(coverOf(w))}" alt="${esc(w.title)} 封面" loading="lazy" onerror="this.classList.add('img-missing')">
+        ${w.featured ? `<span class="badge badge-tl">${esc(T("works.badgeFeatured", "精选"))}</span>` : ""}
         ${w.dur ? `<span class="badge badge-tr">${esc(w.dur)}</span>` : ""}
         <div class="play"><i></i></div>
       </div>
       <div class="body">
         <h3>${esc(w.title)}</h3>
-        <div class="sub"><span>${esc(c.name)}</span><i></i><span>${esc(sub || "—")}</span></div>
+        <div class="sub">
+          ${subOverride
+            ? `<span>${esc(subOverride)}</span>`
+            : `<span>${esc(c.name)}</span><i></i><span>${esc(sub || "—")}</span>`}
+        </div>
         <div class="tags">${tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
       </div>
     </button>`;
@@ -202,12 +249,15 @@ function bindCards(root) {
 }
 
 function renderFeatured() {
-  // 只展示后台勾了「放进首页精选」的作品；一个都没勾时退回前 6 个并标上精选，避免整块空掉
-  let list = CONFIG.works.filter((w) => w.featured);
+  // 顺序以后台「精选清单」为准；清单为空时回落到 featured 开关；全都没有则用前 6 个兜底
+  const picked = (CONFIG.featuredIds || []).map((id) => WORK_MAP[id]).filter(Boolean);
+  let list = picked.length ? picked : CONFIG.works.filter((w) => w.featured);
   if (!list.length) list = CONFIG.works.slice(0, 6).map((w) => ({ ...w, featured: true }));
-  list = list.slice(0, 6);
+  list = list.slice(0, 12);
 
   const grid = $("#featuredGrid");
+  // 数量跟清单走：≤6 张用 2 列，7 张以上自动切 3 列
+  grid.style.setProperty("--feat-cols", list.length >= 7 ? "3" : "2");
   grid.innerHTML = list.map((w) => cardHTML(w, true)).join("");
   currentList = list.map((w) => w.id);
   bindCards(grid);
@@ -220,7 +270,7 @@ function countsByCat() {
 
 function renderFilters() {
   const counts = countsByCat();
-  const items = [{ id: "all", name: "全部", n: CONFIG.works.length }].concat(
+  const items = [{ id: "all", name: T("works.filterAll", "全部"), n: CONFIG.works.length }].concat(
     CONFIG.categories.map((c) => ({ id: c.id, name: c.name, n: counts[c.id] || 0 }))
   );
 
@@ -250,6 +300,8 @@ function renderLibrary() {
     : CONFIG.works.filter((w) => w.cat === currentFilter);
 
   const grid = $("#libraryGrid");
+  const libCols = Number(CONFIG.card.libraryColumns);
+  if (Number.isFinite(libCols) && libCols > 0) grid.style.setProperty("--lib-cols", String(libCols));
   currentList = list.map((w) => w.id);
 
   if (!list.length) {
@@ -265,31 +317,62 @@ function renderAbout() {
   const counts = countsByCat();
   const max = Math.max(1, ...Object.values(counts));
 
+  /* 某类填了百分比就按百分比画，没填的回落到「按作品数」 */
   $("#skillList").innerHTML = CONFIG.categories.map((c) => {
     const n = counts[c.id] || 0;
+    const raw = c.level;
+    const hasLevel = raw !== null && raw !== undefined && String(raw).trim() !== "" && !Number.isNaN(Number(raw));
+    const pct = hasLevel ? Math.max(0, Math.min(100, Math.round(Number(raw)))) : null;
+    const width = pct !== null ? pct : Math.round((n / max) * 100);
+    const val = pct !== null ? `${pct}%` : String(n);
     return `<div class="skill">
         <span class="k">${esc(c.name)}</span>
-        <span class="bar"><i style="width:${Math.round((n / max) * 100)}%"></i></span>
-        <span class="v">${n}</span>
+        <span class="bar"><i style="width:${width}%"></i></span>
+        <span class="v">${val}</span>
       </div>`;
   }).join("");
 
-  const brands = [...new Set(CONFIG.works.map((w) => (w.client || "").trim()).filter(Boolean))];
-  $("#brandList").innerHTML = brands.map((b) => `<span class="brand-item">${esc(b)}</span>`).join("")
-    || `<span class="brand-item">待补充</span>`;
+  $("#brandList").innerHTML = brandListHTML();
 
   $("#toolList").innerHTML = CONFIG.tools.map((t) => `<span class="chip">${esc(t)}</span>`).join("");
   $("#workflowText").textContent = CONFIG.workflow;
+}
+
+/* 合作方：后台手动列表优先（支持 logo / 链接 / 隐藏），列表为空时回落到从作品客户名自动提取 */
+function brandListHTML() {
+  const manual = (CONFIG.brands || []).filter((b) => b && String(b.name || "").trim() && !b.hidden);
+
+  if (manual.length) {
+    return manual
+      .map((b) => {
+        const logo = mediaPath(b.logo);
+        const name = esc(b.name);
+        const inner = logo
+          ? `<img src="${esc(logo)}" alt="${name}" loading="lazy" />`
+          : `<span class="brand-txt">${name}</span>`;
+        const cls = logo ? "brand-item has-logo" : "brand-item";
+        return b.url
+          ? `<a class="${cls}" href="${esc(b.url)}" target="_blank" rel="noopener">${inner}</a>`
+          : `<span class="${cls}">${inner}</span>`;
+      })
+      .join("");
+  }
+
+  const derived = [...new Set(CONFIG.works.map((w) => (w.client || "").trim()).filter(Boolean))];
+  return (
+    derived.map((b) => `<span class="brand-item">${esc(b)}</span>`).join("") ||
+    `<span class="brand-item">${esc(T("about.brandsEmpty", "待补充"))}</span>`
+  );
 }
 
 /* ---------------- 联系 ---------------- */
 function renderContact() {
   const { me } = CONFIG;
   const items = [
-    { ic: "✉", label: "Email",    val: me.email,    href: `mailto:${me.email}` },
-    { ic: "微", label: "WeChat",   val: me.wechat,   href: "" },
-    { ic: "B",  label: "Bilibili", val: me.bilibili.replace(/^https?:\/\//, ""), href: me.bilibili },
-    { ic: "飞", label: "Feishu",   val: "在线作品集", href: me.feishu }
+    { ic: "✉", label: T("contact.labelEmail", "Email"), val: me.email, href: `mailto:${me.email}` },
+    { ic: "微", label: T("contact.labelWechat", "WeChat"), val: me.wechat, href: "" },
+    { ic: "B",  label: T("contact.labelBilibili", "Bilibili"), val: me.bilibili.replace(/^https?:\/\//, ""), href: me.bilibili },
+    { ic: "飞", label: T("contact.labelFeishu", "Feishu"), val: T("contact.feishuValue", "在线作品集"), href: me.feishu }
   ];
 
   $("#contactGrid").innerHTML = items.map((it) => {
@@ -315,12 +398,12 @@ function openModal({ id, fromList, index, __reel }) {
   if (__reel) {
     const r = CONFIG.showreel;
     $("#modalTitle").textContent = `${CONFIG.me.name} · ${r.title}`;
-    $("#modalDesc").textContent = "精选片段：剪辑、动效包装与 AIGC 的合集。";
+    $("#modalDesc").textContent = T("modal.reelDesc", "精选片段：剪辑、动效包装与 AIGC 的合集。");
     $("#modalTags").innerHTML = CONFIG.me.units.map((t) => `<span>${esc(t)}</span>`).join("");
     $("#modalMeta").innerHTML = [
-      ["类型", "Showreel"],
-      ["内容", CONFIG.me.units.join(" / ")],
-      ["说明", r.note || "—"]
+      [T("modal.reelLabelType", "类型"), T("modal.reelType", "Showreel")],
+      [T("modal.reelLabelContent", "内容"), CONFIG.me.units.join(" / ")],
+      [T("modal.reelLabelNote", "说明"), r.note || "—"]
     ].map(([k, v]) => `<div class="meta-row"><span>${k}</span><b>${esc(v)}</b></div>`).join("");
     $("#modalStage").innerHTML = videoMarkup(r);
     $("#modalNav").hidden = true;
@@ -348,11 +431,11 @@ function fillModal(w) {
   $("#modalStage").innerHTML = videoMarkup(w);
 
   $("#modalMeta").innerHTML = [
-    ["分类", c.name],
-    ["客户", w.client || "—"],
-    ["年份", w.year || "—"],
-    ["职责", w.role || "—"],
-    ["时长", w.dur || "待补"]
+    [T("modal.metaCat", "分类"), c.name],
+    [T("modal.metaClient", "客户"), w.client || "—"],
+    [T("modal.metaYear", "年份"), w.year || "—"],
+    [T("modal.metaRole", "职责"), w.role || "—"],
+    [T("modal.metaDur", "时长"), w.dur || T("modal.durationFallback", "待补")]
   ].map(([k, v]) => `<div class="meta-row"><span>${k}</span><b>${esc(v)}</b></div>`).join("");
 
   $("#modalCount").textContent = `${currentIndex + 1} / ${currentList.length}`;
@@ -463,9 +546,11 @@ function boot() {
     return;
   }
 
+  applyTexts();
   renderHero();
   renderAbilities();
-  document.getElementById("worksCount").textContent = CONFIG.works.length;
+  const wc = document.getElementById("worksCount");
+  if (wc) wc.textContent = CONFIG.works.length;
   renderFeatured();
   renderFilters();
   renderLibrary();
