@@ -1,34 +1,178 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>作品集后台</title>
-  <link rel="stylesheet" href="./theme.css">
-  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <style>
-    /* 后台加载完成前的占位，避免白屏 */
-    body{margin:0;background:#24272d;color:#9ba2ae;font:14px/1.7 system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
-    #boot{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px}
-    #boot b{display:block;color:#eaedf2;font-size:15px;margin-bottom:6px}
-    noscript{color:#ff7a4d}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>王榕兵 · 剪辑师作品集</title>
+<meta name="description" content="剪辑师作品集：宣传片、Ae 动效包装、短视频、AIGC 生成与个人风格混剪，共 32 支成片。">
+<meta name="theme-color" content="#24272d">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="boot"><div><b>正在加载后台…</b>登录后即可增删作品、改文案、填 B 站链接</div></div>
-  <noscript><p style="padding:24px">后台需要 JavaScript，请换用 Chrome / Edge 打开。</p></noscript>
 
-  <!-- Decap CMS 只在后台加载，公共页面不引用 -->
-  <script src="./decap-cms.js"></script>
-  <script>
-    // CMS 接管后隐藏占位
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        const b = document.getElementById("boot");
-        if (b) b.remove();
-      }, 1200);
-    });
-  </script>
+<!-- ============ 导航 ============ -->
+<header class="nav-shell">
+  <nav class="nav" id="nav" aria-label="主导航">
+    <a class="brand" href="#top">
+      <span class="dot"></span>
+      <span id="brandName">WANG RONGBING</span>
+      <span class="role" id="brandRole">/ 剪辑师</span>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#featured" data-t="nav.featured">精选</a>
+      <a href="#works" data-t="nav.works">作品库</a>
+      <a href="#about" data-t="nav.about">关于</a>
+      <a href="#contact" data-t="nav.contact">联系</a>
+    </div>
+
+    <div class="status" id="statusBadge"><b></b>可接片</div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false">
+      <span></span>
+    </button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ Hero ============ -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow" data-t="hero.eyebrow">CLIP · MOTION · AIGC</div>
+          <h1 id="heroTitle"></h1>
+          <p class="tagline" id="heroTagline"></p>
+
+          <div class="hero-actions">
+            <button class="btn btn-solid" id="btnReel"><span class="tri"></span><span data-t="hero.btnReel">播放 Showreel</span></button>
+            <a class="btn btn-ghost" href="#works" data-t="hero.btnWorks">浏览作品库</a>
+          </div>
+
+          <div class="hero-stats" id="heroStats"></div>
+        </div>
+
+        <div class="reel" id="reelCard" role="button" tabindex="0" aria-label="播放 Showreel">
+          <div class="stage">
+            <img id="reelImg" alt="Showreel 封面">
+            <div class="play-badge"><i></i></div>
+            <div class="cap"><span id="reelCap">SHOWREEL</span><em id="reelNote"></em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 能力速览 ============ -->
+  <section class="sec" id="ability">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2><small data-t="ability.kicker">ABILITIES</small><span data-t="ability.title">五类能力，一条成片链</span></h2>
+        <p class="aside" data-t="ability.aside">从叙事剪辑到动效包装，再到 AI 生成与混剪。不同预算、不同周期，都能交付。</p>
+      </div>
+      <div class="ability" id="abilityGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ 精选 ============ -->
+  <section class="sec" id="featured">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2><small data-t="featured.kicker">SELECTED</small><span data-t="featured.title">精选作品</span></h2>
+        <p class="aside" id="featuredAside">先看这几支。完整作品库按分类展开，共 <b id="worksCount">32</b> 支。</p>
+      </div>
+      <div class="grid featured-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ 完整作品库 ============ -->
+  <section class="sec" id="works">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2><small data-t="works.kicker">ARCHIVE</small><span data-t="works.title">完整作品库</span></h2>
+        <p class="aside" data-t="works.aside">按能力分类筛选，点任意作品查看详情，详情页支持 ← → 连续翻阅。</p>
+      </div>
+      <div class="filters" id="filters" role="tablist" aria-label="作品分类筛选"></div>
+      <div class="grid library-grid" id="libraryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ 关于 ============ -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2><small data-t="about.kicker">ABOUT</small><span data-t="about.title">关于我</span></h2>
+        <p class="aside" data-t="about.aside">一个人在一条链上完成：剪辑、动效、包装、调色，以及 AI 生成。</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="panel">
+          <h3><span data-t="about.outputTitle">产出分布</span><small data-t="about.outputKicker">OUTPUT</small></h3>
+          <div class="skill-list" id="skillList"></div>
+
+          <h3 class="h3-gap"><span data-t="about.brandsTitle">合作与项目</span><small data-t="about.brandsKicker">BRANDS &amp; PROJECTS</small></h3>
+          <div class="brands" id="brandList"></div>
+        </div>
+
+        <div class="panel">
+          <h3><span data-t="about.toolsTitle">工具链</span><small data-t="about.toolsKicker">TOOLKIT</small></h3>
+          <div class="chips" id="toolList"></div>
+
+          <h3 class="h3-gap"><span data-t="about.workflowTitle">工作方式</span><small data-t="about.workflowKicker">WORKFLOW</small></h3>
+          <p class="panel-note" id="workflowText"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 联系 ============ -->
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2><small data-t="contact.kicker">CONTACT</small><span data-t="contact.title">聊聊下一支片子</span></h2>
+        <p class="aside" data-t="contact.aside">档期、报价、样片需求，直接说需求就行。</p>
+      </div>
+      <div class="contact-grid" id="contactGrid"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="foot">
+    <span><b id="footName">王榕兵 · 剪辑师</b>　© <span id="footYear">2026</span>　<span data-t="footer.copyright">保留所有权利</span></span>
+    <button class="to-top" id="toTop" data-t="footer.backTop">回到顶部 ↑</button>
+  </div>
+</footer>
+
+<!-- ============ 作品详情弹层 ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-panel" id="modalPanel">
+    <button class="modal-close" id="modalClose" aria-label="关闭详情">✕</button>
+
+    <div class="stage" id="modalStage"></div>
+
+    <div class="modal-body">
+      <div class="modal-main">
+        <h2 id="modalTitle"></h2>
+        <p class="desc" id="modalDesc"></p>
+        <div class="tags" id="modalTags"></div>
+      </div>
+      <div class="meta" id="modalMeta"></div>
+    </div>
+
+    <div class="modal-nav" id="modalNav">
+      <button id="prevWork" type="button">←　<span></span></button>
+      <span class="count" id="modalCount"></span>
+      <button id="nextWork" type="button"><span></span>　→</button>
+    </div>
+  </div>
+</div>
+
+<!-- 内容数据（由 build.mjs 从 content/*.json 生成） -->
+<script src="data/content.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
