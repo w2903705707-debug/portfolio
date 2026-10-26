@@ -13,7 +13,7 @@
       "cover": "",
       "title": "蓉漂杯巾帼科技创新赛",
       "tags": "宣传片 / 赛事",
-      "video": "D:\\Edge下载\\蓉漂杯巾帼科技创新赛",
+      "video": "assets/videos/w01.mp4",
       "id": "w01",
       "year": "2025"
     },
@@ -30,7 +30,7 @@
       "cover": "",
       "title": "华泰赋能舱 · 星越计划纪实",
       "tags": "培训纪实 / 快剪",
-      "video": "",
+      "video": "assets/videos/w02.mp4",
       "id": "w02",
       "year": "2025"
     },
@@ -47,7 +47,7 @@
       "cover": "",
       "title": "玛莱宝 · 广州展会宣传包装",
       "tags": "展会 / 口播",
-      "video": "",
+      "video": "assets/videos/w03.mp4",
       "id": "w03",
       "year": "2025"
     },
@@ -64,7 +64,7 @@
       "cover": "",
       "title": "灵笼 · 时尚品类动效",
       "tags": "品类包装 / 时尚",
-      "video": "",
+      "video": "assets/videos/w04.mp4",
       "id": "w04",
       "year": "2024"
     },
@@ -81,7 +81,7 @@
       "cover": "",
       "title": "灵笼 · 宠物品类动效",
       "tags": "品类包装 / 宠物",
-      "video": "",
+      "video": "assets/videos/w05.mp4",
       "id": "w05",
       "year": "2024"
     },
@@ -98,7 +98,7 @@
       "cover": "",
       "title": "美妆品类包装",
       "tags": "品类包装 / 美妆",
-      "video": "",
+      "video": "assets/videos/w06.mp4",
       "id": "w06",
       "year": "2024"
     },
@@ -115,7 +115,7 @@
       "cover": "",
       "title": "UI 动效设计",
       "tags": "UI 动效",
-      "video": "",
+      "video": "assets/videos/w07.mp4",
       "id": "w07",
       "year": "2024"
     },
@@ -132,7 +132,7 @@
       "cover": "",
       "title": "地图类信息动效",
       "tags": "地图 / 信息动效",
-      "video": "",
+      "video": "assets/videos/w08.mp4",
       "id": "w08",
       "year": "2024"
     },
@@ -149,7 +149,7 @@
       "cover": "",
       "title": "国际物流特效包装",
       "tags": "科技 / 特效包装",
-      "video": "",
+      "video": "assets/videos/w09.mp4",
       "id": "w09",
       "year": "2024"
     },
@@ -166,7 +166,7 @@
       "cover": "",
       "title": "科技包装",
       "tags": "科技 / 包装",
-      "video": "",
+      "video": "assets/videos/w10.mp4",
       "id": "w10",
       "year": "2024"
     },
@@ -183,7 +183,7 @@
       "cover": "",
       "title": "游戏买量素材",
       "tags": "游戏买量",
-      "video": "",
+      "video": "assets/videos/w11.mp4",
       "id": "w11",
       "year": "2024"
     },
@@ -200,7 +200,7 @@
       "cover": "",
       "title": "火柴人心理学",
       "tags": "自媒体 / 系列",
-      "video": "",
+      "video": "assets/videos/w12.mp4",
       "id": "w12",
       "year": "2024"
     },
@@ -217,7 +217,7 @@
       "cover": "",
       "title": "美团 OTA 酒店运营",
       "tags": "本地生活 / 口播",
-      "video": "",
+      "video": "assets/videos/w13.mp4",
       "id": "w13",
       "year": "2024"
     },
@@ -234,7 +234,7 @@
       "cover": "",
       "title": "vivo · iQOO 双11",
       "tags": "电商 / 双11",
-      "video": "",
+      "video": "assets/videos/w14.mp4",
       "id": "w14",
       "year": "2024"
     },
@@ -251,7 +251,7 @@
       "cover": "",
       "title": "iQOO Neo 10 Pro 新品",
       "tags": "产品展示",
-      "video": "",
+      "video": "assets/videos/w15.mp4",
       "id": "w15",
       "year": "2024"
     },
@@ -268,7 +268,7 @@
       "cover": "",
       "title": "iQOO Z9 Turbo 机型展示",
       "tags": "机型展示",
-      "video": "",
+      "video": "assets/videos/w16.mp4",
       "id": "w16",
       "year": "2024"
     },
@@ -285,7 +285,7 @@
       "cover": "",
       "title": "iQOO Z9X 机型展示",
       "tags": "机型展示",
-      "video": "",
+      "video": "assets/videos/w17.mp4",
       "id": "w17",
       "year": "2024"
     },
@@ -302,7 +302,7 @@
       "cover": "",
       "title": "防水测试 · 数码种草",
       "tags": "数码种草",
-      "video": "",
+      "video": "assets/videos/w18.mp4",
       "id": "w18",
       "year": "2025"
     },
@@ -319,7 +319,7 @@
       "cover": "",
       "title": "手机选 iQOO · 游戏向",
       "tags": "数码种草 / 游戏",
-      "video": "",
+      "video": "assets/videos/w19.mp4",
       "id": "w19",
       "year": "2025"
     },
@@ -336,7 +336,7 @@
       "cover": "",
       "title": "个人定制短片",
       "tags": "个人定制",
-      "video": "",
+      "video": "assets/videos/w20.mp4",
       "id": "w20",
       "year": "2025"
     },
@@ -353,7 +353,7 @@
       "cover": "",
       "title": "DeepSeek Harness · Moss 开机动画",
       "tags": "AI 生成 / 开机动画",
-      "video": "",
+      "video": "assets/videos/w21.mp4",
       "id": "w21",
       "year": "2025"
     },
@@ -370,7 +370,7 @@
       "cover": "",
       "title": "LibTV 超跑短片",
       "tags": "AI 生成 / 汽车",
-      "video": "",
+      "video": "assets/videos/w22.mp4",
       "id": "w22",
       "year": "2025"
     },
@@ -387,7 +387,7 @@
       "cover": "",
       "title": "云朵抓夹 · AI 品宣 ①",
       "tags": "AI 生成 / 品宣",
-      "video": "",
+      "video": "assets/videos/w23.mp4",
       "id": "w23",
       "year": "2025"
     },
@@ -404,7 +404,7 @@
       "cover": "",
       "title": "云朵发夹 · AI 品宣 ②",
       "tags": "AI 生成 / 品宣",
-      "video": "",
+      "video": "assets/videos/w24.mp4",
       "id": "w24",
       "year": "2025"
     },
@@ -421,7 +421,7 @@
       "cover": "",
       "title": "紫罗兰的永恒花园 · AI 调色",
       "tags": "AI 生成 / 调色",
-      "video": "",
+      "video": "assets/videos/w25.mp4",
       "id": "w25",
       "year": "2025"
     },
@@ -438,7 +438,7 @@
       "cover": "",
       "title": "午夜画廊",
       "tags": "AI 漫剧",
-      "video": "",
+      "video": "assets/videos/w26.mp4",
       "id": "w26",
       "year": "2025"
     },
@@ -455,7 +455,7 @@
       "cover": "",
       "title": "AI 漫剧片段",
       "tags": "AI 漫剧",
-      "video": "",
+      "video": "assets/videos/w27.mp4",
       "id": "w27",
       "year": "2025"
     },
@@ -472,7 +472,7 @@
       "cover": "",
       "title": "AI 古风修仙 ①",
       "tags": "AI 生成 / 古风",
-      "video": "",
+      "video": "assets/videos/w28.mp4",
       "id": "w28",
       "year": "2025"
     },
@@ -523,7 +523,7 @@
       "cover": "",
       "title": "2025.06 生活不是电影",
       "tags": "混剪 / 情绪",
-      "video": "",
+      "video": "assets/videos/w31.mp4",
       "id": "w31",
       "year": "2025"
     },
@@ -540,7 +540,7 @@
       "cover": "",
       "title": "2025.08 欢迎来到开发者模式",
       "tags": "混剪 / 卡点",
-      "video": "",
+      "video": "assets/videos/w32.mp4",
       "id": "w32",
       "year": "2025"
     }

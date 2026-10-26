@@ -99,6 +99,9 @@ let currentIndex  = -1;
 let lastFocused   = null;
 
 /* ---------------- 视频源解析 ---------------- */
+/* 判空：把本地磁盘路径当外链填进来的情况，明确拦下来给提示，而不是拿它当 src 去加载 */
+const looksLocalPath = (s) => /^[a-zA-Z]:[\\/]/.test(s) || /^file:/i.test(s);
+
 function videoMarkup(item) {
   const bili = (item.bilibili || "").trim();
   const mp4  = (item.video || "").trim();
@@ -111,7 +114,15 @@ function videoMarkup(item) {
     return `<iframe src="${esc(src)}" allow="autoplay; fullscreen" allowfullscreen scrolling="no" title="作品视频"></iframe>`;
   }
   if (mp4) {
-    return `<video src="${esc(mp4)}" controls playsinline preload="metadata"></video>`;
+    if (looksLocalPath(mp4)) {
+      return `<div class="ph">
+          <div class="ring"></div>
+          <b>视频地址填错了</b>
+          <span>「本地 mp4 路径」不能填电脑上的磁盘路径（如 D:\\…），要填网站里的相对路径（例如 assets/videos/w01.mp4）或 https 链接。</span>
+        </div>`;
+    }
+    const poster = item.id ? coverOf(item) : (mediaPath(item.cover) || "assets/covers/reel.jpg");
+    return `<video src="${esc(mp4)}" poster="${esc(poster)}" controls playsinline preload="metadata"></video>`;
   }
   return `<div class="ph">
       <div class="ring"></div>
