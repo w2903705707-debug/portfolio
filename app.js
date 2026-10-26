@@ -122,7 +122,7 @@ function videoMarkup(item) {
         </div>`;
     }
     const poster = item.id ? coverOf(item) : (mediaPath(item.cover) || "assets/covers/reel.jpg");
-    return `<video src="${esc(mp4)}" poster="${esc(poster)}" controls playsinline preload="metadata"></video>`;
+    return `<video src="${esc(mp4)}" poster="${esc(poster)}" controls playsinline preload="metadata" onloadedmetadata="if(this.videoHeight>this.videoWidth)this.classList.add('is-portrait')"></video>`;
   }
   return `<div class="ph">
       <div class="ring"></div>
