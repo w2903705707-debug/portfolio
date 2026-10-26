@@ -1,7 +1,7 @@
 /* 自动生成，请勿手动修改。
    源文件：content/site.json + content/works.json（后台 /admin 编辑）
    重新生成：node build.mjs
-   生成时间：2026-10-26T14:13:31.548Z */
+   生成时间：2026-10-26T14:37:11.388Z */
 window.__CONTENT__ = {
   "site": {
     "me": {
