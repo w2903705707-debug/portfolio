@@ -56,6 +56,7 @@ const CONFIG = (() => {
     tools: splitList(site.tools),
     workflow: site.workflow || "",
     texts: site.texts || {},
+    assetVersion: site.assetVersion || '',
     works,
   };
 })();
@@ -85,9 +86,15 @@ const mediaPath = (p) => {
   return v.replace(/^\/+/, "");
 };
 
-const coverOf  = (w) => mediaPath(w.cover) || `assets/covers/${w.id}.jpg`;
+/* 站内图片加版本号，内容变了浏览器才会重新下载 */
+const withV = (p) => {
+  if (!p) return p;
+  if (/^(https?:|data:)/i.test(p)) return p;
+  return CONFIG.assetVersion ? p + (p.includes('?') ? '&' : '?') + 'v=' + CONFIG.assetVersion : p;
+};
+const coverOf  = (w) => withV(mediaPath(w.cover) || `assets/covers/${w.id}.jpg`);
 const catCover = (c) => {
-  if (mediaPath(c.coverImage)) return mediaPath(c.coverImage);
+  if (mediaPath(c.coverImage)) return withV(mediaPath(c.coverImage));
   const first = CONFIG.works.find((w) => w.cat === c.id) || CONFIG.works[0];
   return first ? coverOf(first) : "assets/covers/w01.jpg";
 };
@@ -187,7 +194,7 @@ function renderHero() {
     { n: brandCount, u: "+", t: T("hero.stat3", "合作主体") }
   ].map((s) => `<div class="stat"><b>${s.n}<i>${s.u}</i></b><span>${s.t}</span></div>`).join("");
 
-  $("#reelImg").src = mediaPath(showreel.cover) || "assets/covers/reel.jpg";
+  $("#reelImg").src = withV(mediaPath(showreel.cover) || "assets/covers/reel.jpg");
   $("#reelImg").alt = `${me.name} Showreel 封面`;
   $("#reelCap").textContent = showreel.title;
   $("#reelNote").textContent = showreel.note || "";
@@ -356,7 +363,7 @@ function brandListHTML() {
   if (manual.length) {
     return manual
       .map((b) => {
-        const logo = mediaPath(b.logo);
+        const logo = withV(mediaPath(b.logo));
         const name = esc(b.name);
         const inner = logo
           ? `<img src="${esc(logo)}" alt="${name}" loading="lazy" />`

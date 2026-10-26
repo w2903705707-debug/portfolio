@@ -22,6 +22,14 @@ try {
 }
 site.texts = texts;
 
+/* 素材版本号：封面/图标一变，URL 就变，用来强制刷新浏览器缓存 */
+const crypto = await import('node:crypto');
+const coversDir = path.join(ROOT, 'assets', 'covers');
+const stamp = fs.existsSync(coversDir)
+  ? fs.readdirSync(coversDir).sort().map((f) => f + ':' + fs.statSync(path.join(coversDir, f)).size).join('|')
+  : '';
+site.assetVersion = crypto.createHash('sha1').update(stamp).digest('hex').slice(0, 8);
+
 const items = Array.isArray(worksFile.items) ? worksFile.items : [];
 const catIds = new Set((site.categories || []).map((c) => c.id).filter(Boolean));
 
