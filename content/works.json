@@ -470,7 +470,7 @@
       "role": "AI 生成",
       "cat": "aigc",
       "cover": "",
-      "title": "AI 古风修仙 ①",
+      "title": "AI 漫剧片段 II",
       "tags": "AI 生成 / 古风",
       "video": "assets/videos/w28.mp4",
       "id": "w28",
@@ -479,7 +479,7 @@
     {
       "dur": "",
       "bilibili": "",
-      "hidden": false,
+      "hidden": true,
       "client": "",
       "featured": false,
       "order": 29,
@@ -496,7 +496,7 @@
     {
       "dur": "",
       "bilibili": "",
-      "hidden": false,
+      "hidden": true,
       "client": "",
       "featured": false,
       "order": 30,
