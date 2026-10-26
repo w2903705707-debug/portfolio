@@ -30,12 +30,36 @@ function normalizeWorks(list) {
     });
 }
 
-const CONFIG = (() => {
-  const raw = typeof window !== "undefined" ? window.__CONTENT__ : null;
-  if (!raw) return null;
-  const site = raw.site || {};
+let CONFIG = null;
+
+/* 直接读取 content/*.json —— 不依赖构建步骤，
+   后台（Decap CMS）保存后，任何静态托管都能立刻看到新内容 */
+async function loadConfig() {
+  const bust = "?v=" + Date.now();
+  const getJson = (p) =>
+    fetch(p + bust, { cache: "no-store" }).then((r) => {
+      if (!r.ok) throw new Error(p + " " + r.status);
+      return r.json();
+    });
+
+  try {
+    const [site, worksFile, texts] = await Promise.all([
+      getJson("content/site.json"),
+      getJson("content/works.json"),
+      getJson("content/texts.json"),
+    ]);
+    return buildConfig({ ...site, texts }, (worksFile && worksFile.items) || []);
+  } catch (e) {
+    /* file:// 直开或 JSON 缺失时，回落到已编译的 data/content.js */
+    const raw = typeof window !== "undefined" ? window.__CONTENT__ : null;
+    if (!raw) return null;
+    return buildConfig(raw.site || {}, raw.works || []);
+  }
+}
+
+function buildConfig(site, worksList) {
   const me = site.me || {};
-  const works = normalizeWorks(raw.works || []);
+  const works = normalizeWorks(worksList);
 
   /* 精选清单（有序）优先；清单为空时回落到每条作品的 featured 开关 */
   const featuredIds = (Array.isArray(site.featured) ? site.featured : [])
@@ -56,10 +80,10 @@ const CONFIG = (() => {
     tools: splitList(site.tools),
     workflow: site.workflow || "",
     texts: site.texts || {},
-    assetVersion: '20261027a',
+    assetVersion: "",
     works,
   };
-})();
+}
 
 /* =========================================================================
  *  以下为实现，一般不需要改动
@@ -76,8 +100,8 @@ const T = (path, fallback = "") => {
   return val == null || val === "" ? fallback : String(val);
 };
 
-const CAT      = Object.fromEntries(CONFIG.categories.map((c) => [c.id, c]));
-const WORK_MAP = Object.fromEntries(CONFIG.works.map((w) => [w.id, w]));
+let CAT = {};
+let WORK_MAP = {};
 /* 媒体路径：外链原样、站内绝对路径去掉前导斜杠，保证 file:// 也能看 */
 const mediaPath = (p) => {
   const v = String(p || "").trim();
@@ -548,7 +572,8 @@ function initNav() {
 }
 
 /* ---------------- 启动 ---------------- */
-function boot() {
+async function boot() {
+  CONFIG = await loadConfig();
   if (!CONFIG) {
     // 内容没生成时给出可操作的提示，而不是白屏
     document.body.insertAdjacentHTML(
@@ -563,6 +588,9 @@ function boot() {
     );
     return;
   }
+
+  CAT = Object.fromEntries(CONFIG.categories.map((c) => [c.id, c]));
+  WORK_MAP = Object.fromEntries(CONFIG.works.map((w) => [w.id, w]));
 
   applyTexts();
   renderHero();
