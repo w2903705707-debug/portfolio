@@ -1,7 +1,7 @@
 /* 自动生成，请勿手动修改。
    源文件：content/site.json + content/works.json（后台 /admin 编辑）
    重新生成：node build.mjs
-   生成时间：2026-10-26T15:59:45.226Z */
+   生成时间：2026-10-26T16:08:33.293Z */
 window.__CONTENT__ = {
   "site": {
     "me": {
@@ -166,8 +166,7 @@ window.__CONTENT__ = {
         "reelLabelContent": "内容",
         "reelLabelNote": "说明"
       }
-    },
-    "assetVersion": "5c4f393f"
+    }
   },
   "works": [
     {

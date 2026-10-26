@@ -56,7 +56,7 @@ const CONFIG = (() => {
     tools: splitList(site.tools),
     workflow: site.workflow || "",
     texts: site.texts || {},
-    assetVersion: site.assetVersion || '',
+    assetVersion: '20261027a',
     works,
   };
 })();
