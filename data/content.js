@@ -1,12 +1,12 @@
 /* 自动生成，请勿手动修改。
    源文件：content/site.json + content/works.json（后台 /admin 编辑）
    重新生成：node build.mjs
-   生成时间：2026-10-26T16:08:33.293Z */
+   生成时间：2026-10-26T17:27:02.771Z */
 window.__CONTENT__ = {
   "site": {
     "me": {
       "headlineTop": "把故事",
-      "wechat": "your_wechat",
+      "wechat": "w135203247707",
       "bilibili": "https://space.bilibili.com/000000000",
       "en": "WANG RONGBING",
       "name": "王榕兵",
@@ -15,7 +15,7 @@ window.__CONTENT__ = {
       "status": "可接片",
       "role": "剪辑师",
       "feishu": "https://zqq5cr7upp9.feishu.cn/wiki/WZmewobubiSGmukpmjqcx9nPn1b",
-      "email": "hello@example.com",
+      "email": "2903705707@qq.com",
       "headlineAccent": "节奏",
       "headlineBottom": "剪进节奏里"
     },
@@ -92,51 +92,6 @@ window.__CONTENT__ = {
       }
     ],
     "texts": {
-      "nav": {
-        "featured": "精选",
-        "works": "作品库",
-        "about": "关于",
-        "contact": "联系"
-      },
-      "hero": {
-        "eyebrow": "CLIP · MOTION · AIGC",
-        "btnReel": "播放 Showreel",
-        "btnWorks": "浏览作品库",
-        "stat1": "成片作品",
-        "stat2": "能力方向",
-        "stat3": "合作主体"
-      },
-      "ability": {
-        "kicker": "ABILITIES",
-        "title": "五类能力，一条成片链",
-        "aside": "从叙事剪辑到动效包装，再到 AI 生成与混剪。不同预算、不同周期，都能交付。"
-      },
-      "featured": {
-        "kicker": "SELECTED",
-        "title": "精选作品",
-        "aside": "先看这几支。完整作品库按分类展开，共 {count} 支。"
-      },
-      "works": {
-        "kicker": "ARCHIVE",
-        "title": "完整作品库",
-        "aside": "按能力分类筛选，点任意作品查看详情，详情页支持 ← → 连续翻阅。",
-        "filterAll": "全部",
-        "badgeFeatured": "精选"
-      },
-      "about": {
-        "kicker": "ABOUT",
-        "title": "关于我",
-        "aside": "一个人在一条链上完成：剪辑、动效、包装、调色，以及 AI 生成。",
-        "outputTitle": "产出分布",
-        "outputKicker": "OUTPUT",
-        "brandsTitle": "合作与项目",
-        "brandsKicker": "BRANDS & PROJECTS",
-        "toolsTitle": "工具链",
-        "toolsKicker": "TOOLKIT",
-        "workflowTitle": "工作方式",
-        "workflowKicker": "WORKFLOW",
-        "brandsEmpty": "待补充"
-      },
       "contact": {
         "kicker": "CONTACT",
         "title": "聊聊下一支片子",
@@ -147,24 +102,69 @@ window.__CONTENT__ = {
         "labelFeishu": "Feishu",
         "feishuValue": "在线作品集"
       },
+      "works": {
+        "kicker": "ARCHIVE",
+        "title": "完整作品库",
+        "aside": "按能力分类筛选，点任意作品查看详情",
+        "filterAll": "全部",
+        "badgeFeatured": "精选"
+      },
+      "nav": {
+        "featured": "精选",
+        "works": "作品库",
+        "about": "关于",
+        "contact": "联系"
+      },
+      "ability": {
+        "kicker": "ABILITIES",
+        "title": "五类能力，一条成片链",
+        "aside": "从叙事剪辑到动效包装，再到 AI 生成与混剪。不同预算、不同周期，都能交付。"
+      },
+      "modal": {
+        "metaYear": "年份",
+        "videoPendingHint": "在后台「作品库」里给这条作品填上 B 站链接，或填一个本地 mp4 路径，这里就会变成播放器。",
+        "reelDesc": "精选片段：剪辑、动效包装与 AIGC 的合集。",
+        "reelLabelNote": "说明",
+        "metaClient": "客户",
+        "metaCat": "分类",
+        "reelType": "Showreel",
+        "reelLabelType": "类型",
+        "durationFallback": "待补",
+        "metaRole": "职责",
+        "videoPending": "视频待上传",
+        "metaDur": "时长",
+        "reelLabelContent": "内容"
+      },
+      "about": {
+        "brandsEmpty": "待补充",
+        "brandsTitle": "合作与项目",
+        "toolsKicker": "TOOLKIT",
+        "workflowKicker": "WORKFLOW",
+        "kicker": "ABOUT",
+        "outputKicker": "OUTPUT",
+        "outputTitle": "产出分布",
+        "aside": "一个人在一条链上完成：剪辑、动效、包装、调色，以及 AI 生成。",
+        "title": "关于我",
+        "workflowTitle": "工作方式",
+        "toolsTitle": "工具链",
+        "brandsKicker": "BRANDS & PROJECTS"
+      },
+      "featured": {
+        "kicker": "SELECTED",
+        "title": "精选作品",
+        "aside": "先看这几支。完整作品库按分类展开，共 {count} 支。"
+      },
+      "hero": {
+        "eyebrow": "CLIP · MOTION · AIGC",
+        "btnReel": "播放 Showreel",
+        "btnWorks": "浏览作品库",
+        "stat1": "成片作品",
+        "stat2": "能力方向",
+        "stat3": "合作主体"
+      },
       "footer": {
         "copyright": "保留所有权利",
         "backTop": "回到顶部 ↑"
-      },
-      "modal": {
-        "videoPending": "视频待上传",
-        "videoPendingHint": "在后台「作品库」里给这条作品填上 B 站链接，或填一个本地 mp4 路径，这里就会变成播放器。",
-        "metaCat": "分类",
-        "metaClient": "客户",
-        "metaYear": "年份",
-        "metaRole": "职责",
-        "metaDur": "时长",
-        "durationFallback": "待补",
-        "reelType": "Showreel",
-        "reelDesc": "精选片段：剪辑、动效包装与 AIGC 的合集。",
-        "reelLabelType": "类型",
-        "reelLabelContent": "内容",
-        "reelLabelNote": "说明"
       }
     }
   },
@@ -265,7 +265,7 @@ window.__CONTENT__ = {
       "role": "Ae 动效",
       "cat": "ae",
       "cover": "",
-      "title": "美妆品类包装",
+      "title": "灵笼 ·美妆品类包装",
       "tags": "品类包装 / 美妆",
       "video": "assets/videos/w06.mp4",
       "id": "w06",
@@ -378,7 +378,7 @@ window.__CONTENT__ = {
       "bilibili": "",
       "hidden": false,
       "client": "美团",
-      "featured": true,
+      "featured": false,
       "order": 13,
       "desc": "酒店运营向口播视频，信息前置、结论清楚。",
       "role": "剪辑 · 口播",
@@ -446,7 +446,7 @@ window.__CONTENT__ = {
       "bilibili": "",
       "hidden": false,
       "client": "iQOO",
-      "featured": false,
+      "featured": true,
       "order": 17,
       "desc": "同系列机型展示，控制时长与信息密度。",
       "role": "剪辑",
@@ -639,44 +639,10 @@ window.__CONTENT__ = {
       "role": "AI 生成",
       "cat": "aigc",
       "cover": "",
-      "title": "AI 古风修仙 ①",
+      "title": "AI 漫剧片段 II",
       "tags": "AI 生成 / 古风",
       "video": "assets/videos/w28.mp4",
       "id": "w28",
-      "year": "2025"
-    },
-    {
-      "dur": "",
-      "bilibili": "",
-      "hidden": false,
-      "client": "",
-      "featured": false,
-      "order": 29,
-      "desc": "同一题材的第二条，换镜头语言与节奏。",
-      "role": "AI 生成",
-      "cat": "aigc",
-      "cover": "",
-      "title": "AI 古风修仙 ②",
-      "tags": "AI 生成 / 古风",
-      "video": "",
-      "id": "w29",
-      "year": "2025"
-    },
-    {
-      "dur": "",
-      "bilibili": "",
-      "hidden": false,
-      "client": "",
-      "featured": false,
-      "order": 30,
-      "desc": "系列收尾，尝试更长的镜头衔接。",
-      "role": "AI 生成",
-      "cat": "aigc",
-      "cover": "",
-      "title": "AI 古风修仙 ③",
-      "tags": "AI 生成 / 古风",
-      "video": "",
-      "id": "w30",
       "year": "2025"
     },
     {
