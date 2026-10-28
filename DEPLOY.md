@@ -1,246 +1,239 @@
-# 使用与维护说明
+# 作品集项目 · 运维与交接说明
 
-剪辑师作品集 · 纯静态站点 + 网页后台。内容在后台点选，保存后自动上线。
+> 这份文档记录了项目的真实状态、操作流程和待办事项。
+> 换一个对话 / 换一台电脑接手时，先读这一份就够了。
 
 ---
 
-## 一、内容都放在哪
+## 一、当前线上地址
+
+| 用途 | 地址 | 状态 |
+|---|---|---|
+| **作品集（给 HR 看）** | https://w2903705707-debug.github.io/portfolio/ | ✅ GitHub Pages，实时 |
+| **后台（编辑内容）** | https://magenta-fudge-acb97a.netlify.app/admin/ | ✅ 可登录可发布 |
+| 旧地址（同内容快照） | https://magenta-fudge-acb97a.netlify.app | ⚠️ Netlify 部署已暂停，停在旧快照 |
+| 代码仓库 | https://github.com/w2903705707-debug/portfolio | 公开，约 510MB |
+
+**为什么后台还在 Netlify**：Decap CMS 的 GitHub OAuth 回调注册在 Netlify 上，那边登录最稳。
+Netlify 只是**停止部署**（免费额度用尽），网站和后台仍可正常访问。
+
+---
+
+## 二、架构（重要）
 
 ```
-content/site.json    ← 个人信息、联系方式、Showreel、分类（含百分比）、工具链、
-                       工作方式、合作方列表（可传 logo）、首页精选清单（有顺序）
-content/works.json   ← 32 个作品（标题、分类、B 站链接、封面、隐藏开关、排序）
-content/texts.json   ← 全站 56 条文案（各区块标题、说明、按钮文字、弹层标签）
+后台改内容 → 发布 → 写入 GitHub 仓库 content/*.json
+                          ↓
+              GitHub Pages 自动重建（1–2 分钟）
+                          ↓
+        前端 app.js 运行时 fetch content/*.json  → 页面更新
 ```
 
-这三个文件由**后台 `/admin`** 编辑，你也可以直接改 JSON。改完必须执行一次编译：
+**关键点：网站不需要构建步骤。**
+`app.js` 启动时直接请求：
+
+```
+content/site.json    站点设置（个人信息/分类/卡片/品牌/精选清单/工具链）
+content/works.json   作品库（items 数组）
+content/texts.json   页面文案（9 个分组）
+```
+
+请求带 `?v=时间戳`，所以内容永远是新的，不受浏览器缓存影响。
+
+`data/content.js` 是旧的构建产物，现在只作为 `file://` 直接打开时的兜底，**不需要维护**。
+`build.mjs` 仍可用于本地校验（`node build.mjs`），但线上已经不需要。
+
+`index.html` 里资源引用带版本号（`app.js?v=20261027b`）。**改动 app.js / style.css 后，要把这个版本号改一下**，否则老访客可能继续用缓存的旧脚本，最多持续 10 分钟。
+
+---
+
+## 三、目录结构
+
+```
+D:\Desgin\portfolio-neu\
+  index.html            单页结构（文字位置用 data-t="分组.键" 标记）
+  style.css             全部样式，:root 下是主题变量
+  app.js                全部逻辑（运行时加载 JSON、渲染、弹层、筛选）
+  build.mjs             可选的校验/编译脚本
+  content\
+    site.json           站点设置
+    works.json          作品库
+    texts.json          页面文案
+  data\content.js       旧构建产物（仅 file:// 兜底）
+  assets\
+    videos\wNN.mp4      作品视频（约 490MB，31 个）
+    covers\wNN.jpg      封面（1280×720，按 16:9 居中裁切）
+    favicon.svg
+  admin\                Decap CMS（config.yml / theme.css / decap-cms.js）
+  tools\                各种处理脚本，见第六节
+  shots\                验证用截图（非线上资源）
+  DEPLOY.md             本文件
+```
+
+---
+
+## 四、日常操作
+
+### 改文字 / 改联系方式 / 调顺序 / 藏作品
+
+全部在后台完成：
+
+1. 打开 https://magenta-fudge-acb97a.netlify.app/admin/
+2. 左侧选 **站点设置** / **作品库** / **页面文案**
+3. 改完点右上角 **发布 ▾ → 立即发布**（主按钮只展开菜单，必须点下拉里那项）
+4. 等 1–2 分钟，刷新作品集网站
+
+### 加一支新作品
+
+1. 后台 → 作品库 → **添加一条**
+2. 标题、分类、客户、年份、职责、时长、描述、标签
+3. 「分类编号」不要动（`xcp / ae / short / aigc / mix` 靠它关联）
+4. 有视频就填「本地 mp4 路径」`assets/videos/wNN.mp4` 或「B 站链接」
+5. 发布
+
+### 藏起一个位置（不删）
+
+作品库 → 那条 → 勾 **隐藏这个作品位** → 发布。数据保留，随时能取消。
+
+---
+
+## 五、视频处理
+
+### 硬性限制（实测）
+
+| 通道 | 限制 |
+|---|---|
+| GitHub **网页上传** | 单文件 25MB |
+| GitHub **API**（`push-files.mjs`） | 单文件约 **36MB**（62MB 就被拒 422） |
+| **Git**（推荐） | 无实际限制（仓库总量 1GB 软上限） |
+| Netlify 免费流量 | 100GB/月 |
+| GitHub Pages | 软限制 100GB/月，单文件走仓库限制（100MB） |
+
+### 当前编码参数（质量优先）
 
 ```bash
-node build.mjs        # 生成 data/content.js（站点真正读的文件）
+ffmpeg -y -i 源.mp4 \
+  -vf "scale='if(gte(iw,ih),min(1920,iw),-2)':'if(gte(iw,ih),-2,min(1920,ih))':flags=lanczos,format=yuv420p" \
+  -c:v libx264 -preset medium -profile:v high -level 4.1 -crf 20 \
+  -movflags +faststart -c:a aac -b:a 160k -ac 2 \
+  assets/videos/wNN.mp4
 ```
 
-`build.mjs` 会做校验：id 重复、分类写错会直接报错并拒绝生成，不会把坏数据发上线。
+- `crf 20` 视觉近无损；重要长片可降到 18
+- **不要为了码率牺牲清晰度**——源片信息量才是上限
+- 竖屏保持竖屏，`app.js` 会自动识别并完整显示（不拉伸）
 
----
+### 批量处理
 
-## 二、三种使用场景
+```
+node tools/encode-all.mjs     # 扫 D:\Desgin\video，按文件名映射到 wNN 自动编码
+node tools/encode-pick.mjs    # 只重压指定的几支
+```
 
-| 我想 | 怎么做 |
-|---|---|
-| 发给 HR 看 | 部署好之后，把 `https://你的站点.netlify.app` 发过去 |
-| 改内容 | 打开 `https://你的站点.netlify.app/admin`，GitHub 登录，改完点保存 |
-| 本地看效果 | `node build.mjs` 后双击 `index.html`，或 `python -m http.server` |
-
----
-
-## 三、第一次搭起来（约 20 分钟，只需一次）
-
-### 1. 把整个文件夹传到 GitHub
-
-**推荐：网页上传（不用装任何东西）**
-
-1. GitHub 新建仓库，名字 `portfolio`，**不要**勾 "Add a README file"
-2. 仓库页面 → **Add file → Upload files**
-3. 把 `portfolio-neu` 文件夹**里面的全部内容**拖进去（`index.html`、`app.js`、`style.css`、`build.mjs`、`netlify.toml`、`content/`、`data/`、`admin/`、`assets/`、`DEPLOY.md`）
-   - ⚠️ 拖的是**文件夹里的东西**，不是文件夹本身，否则会多一层目录、站点打不开
-   - 一次最多 100 个文件，本站共 43 个，够用
-4. 底部写提交说明 → **Commit changes**
-
-> `shots/`、`preview/`、`app.before-cms.js` 是本地开发产物，**不用上传**（`.gitignore` 里已排除）。
-
-**如果你装了 Git，也可以走命令行：**
+`encode-all.mjs` 会跳过「输出比源新」的文件；**如果某次编码被中断，必须手动删掉那个残缺文件再重跑**（否则会被当成已完成）。
+编码后务必校验：
 
 ```bash
-git remote add origin https://github.com/你的用户名/portfolio.git
-git push -u origin main
+ffprobe -v error -show_format assets/videos/wNN.mp4   # 报 moov atom not found 就是坏的
 ```
-
-### 2. Netlify 连这个仓库
-
-1. <https://app.netlify.com/> → **Add new site → Import an existing project**
-2. 选 **GitHub**，授权后选中你的 `portfolio` 仓库
-3. 构建配置它会自动从 `netlify.toml` 读到：
-   - Build command: `node build.mjs`
-   - Publish directory: `.`
-4. 点 **Deploy**
-
-### 3. 打开后台登录（关键一步）
-
-Decap CMS 需要 GitHub 授权，要在两处各配一次：
-
-**a) GitHub 建 OAuth App**
-
-GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App
-
-| 字段 | 填什么 |
-|---|---|
-| Application name | 作品集后台 |
-| Homepage URL | `https://你的站点.netlify.app` |
-| Authorization callback URL | `https://api.netlify.com/auth/dialog/github/callback` |
-
-注册后拿到 **Client ID**，再点 **Generate a new client secret** 拿到 **Client Secret**。
-
-**b) Netlify 填入这对密钥**
-
-Netlify → 你的站点 → **Site configuration → Access & security → OAuth**（不同版本可能叫 Access control / OAuth）→ Install provider → **GitHub** → 粘贴 Client ID 与 Client Secret → 保存。
-
-**c) 改后台配置里的仓库名**
-
-打开 `admin/config.yml`，把第一行的占位改掉：
-
-```yaml
-backend:
-  name: github
-  repo: 你的用户名/portfolio    # ← 改这里
-  branch: main
-```
-
-提交这次改动，等 Netlify 重新部署完成。
-
-### 4. 登录
-
-访问 `https://你的站点.netlify.app/admin` → **Log in with GitHub** → 授权。
-
-只有对该仓库有 push 权限的 GitHub 账号能进 —— 这就是「只有我能改」的实现方式，不是前端密码。
 
 ---
 
-## 四、日常怎么改
+## 六、工具脚本（tools/）
 
-全部在 `/admin` 里点，改完点右上角 **Publish**，Netlify 自动构建，几十秒后线上生效。
-
-### 隐藏一个作品位（不是删除）
-
-作品库 → 展开某条 → 勾上 **「隐藏这个作品位」** → Publish。
-
-隐藏后：首页精选、全库卡片、分类计数、弹层左右翻页里都不再出现它。
-**数据还在**，想恢复就取消勾选。
-
-### 真的删掉
-
-作品库 → 右上角那条作品 → 垃圾桶图标。删了就没了（可以靠 GitHub 历史找回）。
-
-### 新增一个作品
-
-作品库 → **Add 作品** → 填标题、选分类、填简介。
-
-⚠️ **唯一编号**默认不要改（例如 `w01`），它和 `assets/covers/w01.jpg` 封面文件对应。新增时可以用 `w33`、`w34`。
-
-### 调顺序
-
-改每条作品的 **「排序」** 数字，越小越靠前（1 = 第一个）。Publish 后生效。
-
-### 换封面
-
-每条作品 → **封面图** → 上传，或留空自动用 `assets/covers/<编号>.jpg`。
-上传的图会存进 `assets/covers/` 并被提交到仓库。
-
-建议尺寸 1280×720（16:9），单张 200KB 以内。
-
-### 填 B 站链接（让作品能播）
-
-每条作品 → **「B 站链接或 BV 号」**：
-
-| 填什么 | 效果 |
+| 脚本 | 作用 |
 |---|---|
-| `BV1xx411c7mD` | 详情弹层变成 B 站播放器 |
-| `https://www.bilibili.com/video/BV1xx411c7mD` | 一样，会自动提取 BV 号 |
-| 留空 | 显示「视频待上传」占位 |
+| `encode-all.mjs` | 批量编码 `D:\Desgin\video` 下全部源片 |
+| `encode-pick.mjs` | 重压指定几支（列表写在脚本里） |
+| `make-covers-from-video.py` | 每支抽 12 帧自动打分挑最佳，输出候选封面 |
+| `make-cover-candidates.py` | 为指定作品生成 10 个候选帧对照图（人工挑） |
+| `finalize-covers.py` | 按最终时间点生成 1280×720 封面；`MANUAL` 字典可覆盖自动挑选 |
+| `locate-and-crop.py` | 用一张截图在视频里反查时间点（相似度匹配） |
+| `push-files.mjs` | 用 GitHub API 推文件（单文件 ≤36MB 时可用） |
+| `shoot.mjs` | 用 CDP 无头浏览器截图 / 执行页面 JS / 抓 console |
 
-填了 `本地 mp4 路径` 时，**B 站优先**。两者都空 = 占位。
-
-> B 站那边视频要设为「公开」或「仅链接可见」，不能「仅自己可见」，否则 HR 看到的是黑屏。
-
-### 改页面文案（区块标题与说明）
-
-后台 → **页面文案** → 9 个折叠分组（导航 / 首屏 / 能力速览 / 精选 / 作品库 / 关于 / 联系 / 页脚 / 详情弹层）。
-
-精选区说明里的「共 N 支」会自动填数字，你写 `{count}` 就行。
-
-### 改「产出分布」的百分比
-
-后台 → 站点设置 → **能力分类** → 每类有个「百分比 0-100」。
-
-- 填了 → 进度条按你填的数字画，右侧显示百分比
-- 留空 → 回到自动模式，按该类作品数量算
-- 可以混用：只给重点类别填百分比，其余留空
-
-### 改「合作与项目」的标签
-
-后台 → 站点设置 → **合作与项目（手动维护）**：
-
-| 字段 | 说明 |
-|---|---|
-| 名称 | 品牌名，必填 |
-| Logo 图片 | 上传后显示图标；留空显示文字 |
-| 链接 | 可选，点标签跳转 |
-| 不显示这一项 | 勾上即隐藏，不删数据 |
-
-**整个列表为空时**，会自动从所有作品的「客户」字段里提取品牌名（就是现在的表现）。
-
-### 调「精选作品」的顺序
-
-后台 → 站点设置 → **首页精选**：
-
-- 每条是一个下拉框 + **上下箭头**，用箭头就能挪顺序
-- 想换掉某一支，点下拉改选
-- 想删就用垃圾桶；想加就点「Add」
-- 清空整个列表 → 回落到每支作品的「放进首页精选」开关
-
-> 下拉里的 32 个选项是 `build.mjs` 每次构建时自动写进 config 的，所以新增作品后选项会自动出现，你不用手动维护。
-
-### 改个人信息 / 联系方式
-
-站点设置 → 个人信息。改完 Publish，导航、Hero、页脚、联系区一起更新。
+Python 脚本要设 `PYTHONIOENCODING=utf-8`，否则中文/符号会因 GBK 编码报错。
 
 ---
 
-## 五、初始化生成的部分（一般不用动）
-
-| 文件 | 作用 |
-|---|---|
-| `index.html` | 页面骨架 |
-| `style.css` | 深色新拟态设计令牌与响应式 |
-| `app.js` | 渲染逻辑（读 `data/content.js`） |
-| `data/content.js` | **构建产物**，勿手改，由 `build.mjs` 生成 |
-| `netlify.toml` | 构建命令、发布目录、后台不索引 |
-| `build.mjs` | JSON → 站点数据的编译脚本 |
-| `admin/` | Decap CMS 后台（只在 `/admin` 加载，公共页面不引用） |
-| `admin/decap-cms.js` | CMS 脚本的**本地副本**（4.6MB）。这样后台不依赖 unpkg CDN，CDN 挂了也能进 |
-| `admin/theme.css` | 后台主题：炭灰底 + 暖橙，与展示页同一套语言 |
-| `assets/covers/` | 33 张封面（`w01..w32.jpg` + `reel.jpg`） |
-| `tools/` | 占位封面生成、无头浏览器截图自测（开发用，可删） |
-
-占位封面重新生成：
+## 七、用 Git 推送（最可靠的方式）
 
 ```bash
-python tools/make-covers.py            # 电影感（深色站默认）
-python tools/make-covers.py --morandi  # 低饱和莫兰迪
+# Git 在 D:\Git，需要先挂上系统代理（Astrill 的 127.0.0.1:3213）
+git config --global http.proxy http://127.0.0.1:3213
+git config --global https.proxy http://127.0.0.1:3213
+
+# 克隆（只拉提交树，不下载视频，很快）
+git clone --filter=blob:none --no-checkout --depth 1 \
+  https://x-access-token:<TOKEN>@github.com/w2903705707-debug/portfolio.git repo-git
+cd repo-git && git read-tree HEAD
+
+# 改完文件后
+mkdir -p 需要的目录        # --no-checkout 克隆没有工作文件，目录要自己建
+cp <新文件> <目标路径>
+git add <路径>
+git -c user.name=x -c user.email=x@x commit -m "说明"
+git push origin main
 ```
 
----
-
-## 六、排查
-
-**页面显示「内容还没生成」**
-→ 忘了 `node build.mjs`，或者 Netlify 构建失败了（去 Deploys 看日志）。
-
-**后台登录报错 `Failed to load config` / `404`**
-→ `admin/config.yml` 里的 `repo` 还是占位 `YOUR_GITHUB_USERNAME/portfolio`。
-
-**后台能登录，但保存后线上没变**
-→ 看 Netlify Deploys：是不是构建失败了。构建失败时线上仍是上一版（不会挂）。
-
-**某个作品不显示**
-→ 检查它的「隐藏」是否被勾上；或分类 id 是否被改坏了（作品靠 `xcp/ae/short/aigc/mix` 关联分类）。
-
-**视频不播**
-→ 依次查：B 站视频是否公开、BV 号是否完整、是否开了「仅自己可见」。
+> **注意**：`repo-git` 是临时工作目录，remote 里内嵌了 token。
+> 用完后请删除该目录，或执行 `git remote set-url origin https://github.com/w2903705707-debug/portfolio.git`。
 
 ---
 
-## 七、三条不要碰的规则
+## 八、已知限制与坑
 
-1. **分类的「编号」不要改**（`xcp / ae / short / aigc / mix`）——作品靠它关联分类，改了会导致作品掉到「未分类」。
-2. **`data/content.js` 不要手改**——它是构建产物，下次构建会被覆盖。要改内容请改 `content/*.json` 或走后台。
-3. **`admin/config.yml` 里 `# >>> featured-options` 和 `# <<< featured-options` 之间的内容不要手改**——那是构建时按作品列表自动生成的精选下拉选项。
+1. **GitHub Pages 有缓存**：HTML/JS/CSS 约 10 分钟。改了 app.js 要同步改 `index.html` 里的 `?v=` 版本号。
+2. **Netlify 免费额度**：2026-10 期间耗尽，`Production deploys are paused`。约每月 1 号重置。
+3. **Git 默认不走 Windows 系统代理**：必须显式 `git config --global http.proxy`。
+4. **会话 shell 里有 `HTTPS_PROXY=127.0.0.1:3213`**：Astrill 没开时 Node 会 `ECONNREFUSED`，临时用 `HTTPS_PROXY= NO_PROXY='*'` 绕过。
+5. **API 推送大文件会 401**：连续大量上传后 GitHub 临时风控，过一会儿再试；>36MB 直接用 Git。
+6. **编码中断会留残缺文件**：报 `moov atom not found`，必须删除重编。
+7. **竖屏视频**：CSS 对竖屏用 `object-fit: contain`（完整显示 + 两侧黑边），横屏用 `cover`（填满）；判断逻辑在 `app.js` 的 `onloadedmetadata`。
+
+---
+
+## 九、待办（截至 2026-10-28）
+
+| 事项 | 说明 |
+|---|---|
+| **w29 / w30 缺视频** | AI 古风修仙 ②③，把原片放进 `D:\Desgin\video` 后跑 `encode-all.mjs` |
+| **B 站主页链接是占位** | 后台站点设置里还是 `000000000`，点了 404 |
+| **w06 / w12 封面偏"文字卡"** | 可用 `make-cover-candidates.py` 重新挑帧 |
+| **Netlify 老站点** | 另有一个带密码的旧站 `frolicking-sfogliatella-0616e1`，可删除 |
+| **可选：迁到对象存储** | 想让长片跑 6–8Mbps 时用 R2（免费 10GB + 出网免费） |
+| **可选：自定义域名** | `wangrongbing.com` 之类，比 github.io 专业 |
+
+---
+
+## 十、安全
+
+- 用过的 GitHub token（`portfolio-video` / `portfolio-git` 等）用过即应在
+  https://github.com/settings/tokens 删除。
+- 若 `D:\Desgin\repo-git` 仍存在，其中 `.git/config` 内嵌了 token 明文，请删除或改写 remote。
+- `D:\Desgin\proxy-backup-20261028.reg` 是改系统代理前的注册表备份，确认网络正常后可删。
+
+---
+
+## 十一、本地预览
+
+```bash
+cd D:\Desgin\portfolio-neu
+python -m http.server 8099 --bind 127.0.0.1
+# 浏览器打开 http://127.0.0.1:8099/index.html
+```
+
+直接双击 `index.html`（file://）也能看，但 `fetch` 会失败，此时走 `data/content.js` 兜底——
+那个文件是旧的，内容可能过期。**本地看效果请用 http 服务器。**
+
+---
+
+## 十二、系统里留下的东西
+
+| 位置 | 作用 |
+|---|---|
+| 计划任务 `DSH ProxyGuard Logon` / `Watch` | 每 5 分钟检查 Astrill 死代理并自动关闭（已改为 VBS 静默启动，不闪窗） |
+| `C:\Users\Wrongbing1\AppData\Local\ProxyGuard\` | 上述任务的脚本（`proxy-guard.ps1` + `proxy-guard-hidden.vbs`） |
+| `D:\Desgin\repo-git\` | 临时 Git 工作副本（含 token，用完可删） |
+| `D:\Desgin\portfolio-video\` `portfolio-upload\` `portfolio-replace\` | 历次上传包，已过期，可删 |
+| `D:\Desgin\hq-w01.mp4` `hq-w02.mp4` `hq-w13.mp4` `hq2\` | 高清版中间文件，已进仓库，可删 |
