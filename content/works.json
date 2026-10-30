@@ -173,7 +173,7 @@
     {
       "dur": "",
       "bilibili": "",
-      "hidden": false,
+      "hidden": true,
       "client": "",
       "featured": false,
       "order": 11,
